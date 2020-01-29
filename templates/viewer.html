@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>OmniViewer</title>
+    <link rel="shortcut icon" type="image/png" href="/static/images/logo.png" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+    <script src="/static/js/bootstrap-notify.min.js"></script>
+    <script src="/static/js/index.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <script>
+        try {
+            var current_search = "{{search_path}}"
+
+            if (current_search == undefined) {
+                throw "undefined http response"
+            }
+        } catch (err) {
+            $(document).ready(function() {
+                notify("Error!", "Error occured in HTTP response, please check your search input", "danger")
+            })
+        }
+
+        var current_page = null
+        var total_page = null
+        var current_search_comps = current_search.split("/")
+        var filtered = false
+
+        $(function() {
+            var csrftoken = $("[name=csrfmiddlewaretoken]").val()
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRFToken": csrftoken
+                }
+            });
+        });
+    </script>
+</head>
+<script>
+</script>
+
+<body>
+    <!-- Nav bar -->
+    <nav class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">
+            <img src="/static/images/brand.png" height="30" class="d-inline-block align-top mr-2" alt=""> OmniViewer
+        </a>
+    </nav>
+
+    <!-- Main body -->
+    <div>
+        <div class="fluid-container mt-3 pb-4">
+            <!-- Search bar -->
+            <div class="row">
+                <div class="col ml-3">
+                    <img src="/static/images/logo.png" width="48" alt="home_logo" class="float-left">
+                    <form action="/viewer/" method="post" class="float-left ml-2">{% csrf_token %}
+                        <div class="p-1 bg-white rounded rounded-pill border border-primary">
+                            <div class="input-group w-400">
+                                <input required type="search" placeholder="Enter your search input" aria-describedby="searchBtn" class="rounded-pill form-control border-0 searchBar" name="search_query" id="searchContent">
+                                <div class="input-group-append">
+                                    <button id="searchBtn" type="submit" class="btn btn-link text-primary"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Main content -->
+            <div class="row mt-4 ml-3 mr-3">
+                <div class="col">
+                    <ul class="nav nav-pills mb-3 pb-2 border-bottom" id="pills-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Image</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Stats</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+
+                        <!-- Image -->
+                        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                            <div class="fluid-container">
+                                <div class="row">
+                                    <div id="currentSearch" class="col float-left">
+                                        <span>Current search : </span>
+                                    </div>
+                                    <div class="col">
+                                        <div class="float-right">
+                                            <form class="form-inline" onsubmit="return internal_search()">
+                                                <input class="form-control mr-sm-2" type="search" placeholder="Enter keyword" aria-label="Search" id="internal-search-value">
+                                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Filter</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Image grid -->
+                            <div class="fluid-container image-grid mt-4" id="image-grid">
+                                <div class="container text-center" id="grid-spinner">
+                                    <div class="spinner-border float-center" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
+
+                                <div class="row" id="image-row">
+                                </div>
+                            </div>
+
+                            <!-- Pagination -->
+                            <nav aria-label="page-footer" class="mt-5">
+                                <ul class="pagination justify-content-center" id="page-counter">
+                                </ul>
+                            </nav>
+
+                            <!-- Page jump -->
+                            <div class="container w-400" id="page-jump">
+                            </div>
+                        </div>
+
+                        <!-- Image stats -->
+                        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                            <div class="fluid-container">
+                                <div class="row justify-content-center">
+                                    <div class="col-6 text-center">
+                                        <span>Image Count</span>
+                                        <table class="p-2 border table table-dark text-center float-center">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Image</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">Count</th>
+                                                    <td id="image-count">Mark</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12 col-sm-12 mt-3 text-center">
+                                        <div class="p-2 border">
+                                            <canvas id="format-pie-chart"></canvas>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-12 col-sm-12 mt-3 text-center">
+                                        <div class="p-2 border">
+                                            <canvas id="label-pie-chart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Large Image Modal -->
+    <div id="large-image-modal" class="modal text-center">
+        <div class="mb-3">
+            <button type="button" class="btn btn-outline-secondary m-2" onclick="zoom_out_large_image_modal()"><i class="fas fa-search-minus"></i></button>
+            <button type="button" class="btn btn-outline-secondary m-2" onclick="zoom_in_large_image_modal()"><i class="fas fa-search-plus"></i></button>
+            <button type="button" class="btn btn-outline-secondary m-2" onclick="download_file_onclick()"><i class="fas fa-download"></i></button>
+        </div>
+
+        <div class="text-white container">
+            <div id="large-image-name"></div>
+            <div class="mt-1 mb-2" id="large-image-size"></div>
+        </div>
+
+        <img class="modal-content mb-3" id="large-image-view" src="../static/images/loader.svg">
+
+        <script>
+            $("#large-image-view").click(function() {
+                $("#large-image-modal").css("display", "none")
+                $("#large-image-view").attr("src", "../static/images/loader.svg")
+            });
+        </script>
+    </div>
+
+    <!-- Copyright footer -->
+    <div class="text-center mt-5">
+        <p>&copy; Li Shenggui</p>
+        <a href="https://github.com/FrankLeeeee/Image-viewer/tree/master">
+            <img class="mb-5" src="../static/images/github-logo.png" height="20px">
+        </a>
+    </div>
+
+</body>
+
+</html>
