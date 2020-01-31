@@ -98,7 +98,7 @@ def get_img_for_page(page_item):
     if page_item['type'] == "image":
         page_item['image'] = get_single_image(page_item['path'], original=False)
     elif page_item['type'] == "yitu_annotation":
-        page_item['image'] = get_single_image_with_yitu_annotation(page_item['path'], pate_item['type'], original=False)
+        page_item['image'] = get_single_image_with_yitu_annotation(page_item['path'], original=False)
     return page_item
 
 def filter_imgs(path_list_item):

@@ -24,7 +24,7 @@ def init(request):
         return JsonResponse(res, status=405)
     else:
         try:
-            req = json.loads(request.body)
+            req = json.loads(request.body.decode("utf-8"))
 
             current_search = req.get('current_search')
             token = req.get('token')
@@ -92,7 +92,7 @@ def get_page(request):
         res = {}
 
         try:
-            req = json.loads(request.body)
+            req = json.loads(request.body.decode("utf-8"))
             page_number = req.get('page_number')
             current_search = req.get('current_search')
             token = req.get('token')
@@ -133,7 +133,7 @@ def get_original_image(request):
         res = {}
 
         try:
-            req = json.loads(request.body)
+            req = json.loads(request.body.decode("utf-8"))
             img_path = req.get('path')
            
             if img_path == None:
@@ -169,7 +169,7 @@ def filter_by_keyword(request):
         res = {}
 
         try:
-            req = json.loads(request.body)
+            req = json.loads(request.body.decode("utf-8"))
             current_search = req.get('current_search')
             keyword = req.get('keyword')
             token = req.get('token')
@@ -217,7 +217,7 @@ def get_stats(request):
         res = {}
 
         try:
-            req = json.loads(request.body)
+            req = json.loads(request.body.decode("utf-8"))
             token = req.get('token')
             filtered = req.get('filtered')
            
@@ -266,7 +266,7 @@ def get_download_id(request):
         res = {}
 
         try:
-            req = json.loads(request.body)
+            req = json.loads(request.body.decode("utf-8"))
             file_path = req.get('file_path')
 
             if file_path == None:
@@ -340,7 +340,7 @@ def get_video_id(request):
         res = {}
 
         try:
-            req = json.loads(request.body)
+            req = json.loads(request.body.decode("utf-8"))
             video_path = req.get('video_path')
 
             if video_path == None:

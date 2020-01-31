@@ -100,6 +100,9 @@ function render_file_grid(path_list) {
                     notify(`AJAX Error ${path_list[i]['image']['status']}`, `: ${path_list[i]['image']['message']} - ${path_list[i]['path']}`, "danger")
                 }
                 break
+            case "yitu_annotation":
+                var img_src = "../static/images/file.png"
+                break
         }
 
         $('#image-row').append(`
@@ -129,7 +132,7 @@ function render_file_grid(path_list) {
             current_obj.addEventListener('dblclick', function(e) {
                 enter_folder(this)
             });
-        } else if (path_list[i].type == "other" && (extension == "list" || extension == "tsv")) {
+        } else if (path_list[i].type == "other" && (extension == "list" || extension == "tsv" || extension == "yitudet")) {
             current_obj.addEventListener('dblclick', function(e) {
                 enter_folder(this)
             });
