@@ -1,14 +1,18 @@
 import time
 from os.path import join, isdir, isfile, exists, abspath, basename
 from os import listdir
-from app.config import *
+from app.config.config import *
 import csv
 
 def map_dir2dict(path, label=None):
+    extension = path.split(".")[-1].lower()
+
     if isdir(path):
         file_type = "dir"
-    elif path.split(".")[-1].lower() in image_formats:
+    elif extension in image_formats:
         file_type = "image"
+    elif extension == "mp4":
+        file_type = "video"
     else:
         file_type = "other"
 
@@ -19,6 +23,17 @@ def map_dir2dict(path, label=None):
         "basename" : file_name,
         "label" : label
     }
+
+def map_yituanno2dict(path):
+    file_name = basename(path)
+
+    return {
+        "type": "yitu_annotation",
+        "path": path,
+        "basename": file_name,
+        "label": None
+    }
+
 
 def getPathContent(path, multiprocessing_pool=None):
     if not exists(path):
@@ -57,5 +72,17 @@ def parseList(list_file_path, multiprocessing_pool=None):
         else:
             file_list = [ map_dir2dict(line) for line in file_list]
 
+        file_list.sort(key=lambda item : item['basename'])
+        return file_list
+
+def parseYituDet(list_file_path, multiprocessing_pool=None):
+    with open(list_file_path, 'r') as f:
+        file_list = f.read().split("\n")
+
+        if multiprocessing_pool:
+            file_list = multiprocessing_pool.map(map_yituanno2dict, file_list)
+        else:
+            file_list = [map_yituanno2dict(line) for line in file_list]
+        
         file_list.sort(key=lambda item : item['basename'])
         return file_list

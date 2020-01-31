@@ -29,3 +29,6 @@ def viewer(request):
             context['code'] = 406
             context['msg'] = "Not acceptable, invalid form data"
             return render(request, "failure.html", context)
+
+def video_page(request):
+    return  render(request, "video.html")

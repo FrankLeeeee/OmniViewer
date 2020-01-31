@@ -89,6 +89,9 @@ function render_file_grid(path_list) {
             case "other":
                 var img_src = "../static/images/file.png"
                 break
+            case "video":
+                var img_src = "../static/images/video.png"
+                break
             case "image":
                 if (path_list[i]['image']['status'] == 200) {
                     var img_src = String.format("data:img/{0};base64, {1}", extension, path_list[i]['image']['encodedImage'])
@@ -117,6 +120,10 @@ function render_file_grid(path_list) {
         if (path_list[i].type == "image") {
             current_obj.addEventListener("click", function(evt) {
                 view_large_image(this)
+            })
+        } else if (path_list[i].type == "video") {
+            current_obj.addEventListener("click", function(evt) {
+                view_video(this)
             })
         } else if (path_list[i].type == "dir") {
             current_obj.addEventListener('dblclick', function(e) {
@@ -459,6 +466,30 @@ function download_file_onclick() {
         },
         error: function(xhr, status, error) {
             notify(`AJAX Error ${xhr.status}:`, `${error} - ${img_path}`, "danger")
+        }
+    });
+}
+
+
+/* ================ Video Modal ========================== */
+function view_video(element) {
+    var video_path = element.alt
+    var video = document.getElementById("video-player")
+    $("#video-modal").css("display", "block")
+
+    $.ajax({
+        url: '/api/getVideoId/',
+        data: JSON.stringify({ video_path: video_path }),
+        type: 'POST',
+        success: function(response) {
+            var video_id = response['data'];
+            document.getElementById('video-source').src = `/api/video/${video_id}`
+            video.load()
+                // var myPlayer = videojs('video-player');
+                // myPlayer.src({ type: "video/mp4", src: `/api/video/${video_id}` })
+        },
+        error: function(xhr, status, error) {
+            notify(`AJAX Error ${xhr.status}:`, `${error} - ${video_path}`, "danger")
         }
     });
 }

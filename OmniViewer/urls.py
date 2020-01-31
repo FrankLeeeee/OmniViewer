@@ -29,5 +29,7 @@ urlpatterns = [
     path("api/filterByKeyword/", api.filter_by_keyword),
     path("api/getStats/", api.get_stats),
     path("api/getDownloadId/", api.get_download_id),
-    path("api/download/<download_id>", api.download_file)
+    path("api/download/<download_id>", api.download_file),
+    path("api/getVideoId/", api.get_video_id),
+    path("api/video/<video_id>", api.stream_video)
 ]
