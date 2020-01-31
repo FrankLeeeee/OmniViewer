@@ -150,7 +150,12 @@ def get_original_image(request):
             return JsonResponse(res, status=404)
         
         try:
-            img_data = getSingleImage(img_path, original=True)
+            extension = img_path.split(".")[-1].lower()
+            
+            if extension == "json":
+                img_data = get_single_image_with_yitu_annotation(img_path, original=True)
+            else:
+                img_data = get_single_image(img_path, original=True)
             res['code'] = 200
             res['message'] = "Image loaded successfully"
             res['data'] = img_data
