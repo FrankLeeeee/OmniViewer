@@ -101,7 +101,12 @@ function render_file_grid(path_list) {
                 }
                 break
             case "yitu_annotation":
-                var img_src = "../static/images/file.png"
+                if (path_list[i]['image']['status'] == 200) {
+                    var img_src = String.format("data:img/{0};base64, {1}", extension, path_list[i]['image']['encodedImage'])
+                } else {
+                    var img_src = "../static/images/picture.png"
+                    notify(`AJAX Error ${path_list[i]['image']['status']}`, `: ${path_list[i]['image']['message']} - ${path_list[i]['path']}`, "danger")
+                }
                 break
         }
 
