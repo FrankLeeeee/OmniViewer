@@ -63,7 +63,7 @@ def get_single_image_with_yitu_annotation(path, original=True):
         extension = img.format
         draw = ImageDraw.Draw(img)
 
-        if detections == None:
+        if detections != None:
             for det in detections:
                 draw.rectangle([det['box']['x'], det['box']['y'], det['box']['x']+det['box']['w'], det['box']['y']+det['box']['h']], outline="green")
                 text = ", ".join([ ",".join(v) for k, v in det['attributes'].items()])
