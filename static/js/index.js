@@ -125,7 +125,7 @@ function render_file_grid(path_list) {
 
         current_obj = document.getElementById(String.format(`cell-${i}`))
 
-        if (path_list[i].type == "image") {
+        if (path_list[i].type == "image" || path_list[i].type == "yitu_annotation") {
             current_obj.addEventListener("click", function(evt) {
                 view_large_image(this)
             })
@@ -137,7 +137,7 @@ function render_file_grid(path_list) {
             current_obj.addEventListener('dblclick', function(e) {
                 enter_folder(this)
             });
-        } else if (path_list[i].type == "other" && (extension == "list" || extension == "tsv" || extension == "yitudet")) {
+        } else if (path_list[i].type == "other" && (extension == "list" || extension == "tsv")) {
             current_obj.addEventListener('dblclick', function(e) {
                 enter_folder(this)
             });
