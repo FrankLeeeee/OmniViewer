@@ -63,26 +63,17 @@ def parseTSV(tsv_file_path, multiprocessing_pool=None):
         file_list.sort(key=lambda item : item['basename'])
         return file_list
 
-def parseList(list_file_path, multiprocessing_pool=None):
+def parseList(list_file_path, multiprocessing_pool=None, map_fn=map_dir2dict):
     with open(list_file_path, 'r') as f:
         file_list = f.read().split("\n")
-
+        
+        if file_list[-1] == "":
+            file_list.pop()
+        
         if multiprocessing_pool:
             file_list = multiprocessing_pool.map(map_dir2dict, file_list)
         else:
-            file_list = [ map_dir2dict(line) for line in file_list]
-
-        file_list.sort(key=lambda item : item['basename'])
-        return file_list
-
-def parseDetectionList(list_file_path, multiprocessing_pool=None):
-    with open(list_file_path, 'r') as f:
-        file_list = f.read().split("\n")
-
-        if multiprocessing_pool:
-            file_list = multiprocessing_pool.map(map_yituanno2dict, file_list)
-        else:
-            file_list = [map_yituanno2dict(line) for line in file_list]
+            file_list = [map_dir2dict(line) for line in file_list]
         
         file_list.sort(key=lambda item : item['basename'])
         return file_list

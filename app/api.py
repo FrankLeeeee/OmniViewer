@@ -57,7 +57,7 @@ def init(request):
                     mode = "tsv"
                 
                 elif extension == "detn":
-                    request.session[token]['path_list'] = parseDetectionList(current_search, pool)
+                    request.session[token]['path_list'] = parseList(current_search, pool, map_fn=map_yituanno2dict)
                     mode = "detection"
         except Exception as e:
             res['code'] = 500
