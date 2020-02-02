@@ -1,6 +1,6 @@
 import json
 
-def yitu_detection(json_path):
+def detection(json_path):
     json_file = json.load(open(json_path, 'r'))
 
     if 'image_path' in json_file:
@@ -13,8 +13,9 @@ def yitu_detection(json_path):
         if 'object_info' in json_file['anno_result']:
             try:
                 for anno in json_file['anno_result']['object_info']:
+                    temp = {}
                     if anno['shape'] == 'rectangleRoi':
-                        temp = {}
+                        temp['shape'] = 'rectangleRoi'
                         temp['box'] = {
                             "x": min(anno['handles']['start']['x'], anno['handles']['end']['x']),
                             "y": min(anno['handles']['start']['y'], anno['handles']['end']['y']),
@@ -24,6 +25,14 @@ def yitu_detection(json_path):
 
                         temp['attributes'] = {}
                         
+                        for attr in anno['attributes']:
+                            temp['attributes'][attr['attr_name']] = attr['anno_value'] if 'anno_value' in attr else attr['default_value']
+                        
+                        det.append(temp)
+                    elif anno['shape'] == 'freehand':
+                        temp['shape'] = 'freehand'
+                        temp['vertex'] = anno['freehand_handles']
+                        temp['attributes'] = {}
                         for attr in anno['attributes']:
                             temp['attributes'][attr['attr_name']] = attr['anno_value'] if 'anno_value' in attr else attr['default_value']
                         

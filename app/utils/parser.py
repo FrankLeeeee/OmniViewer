@@ -28,7 +28,7 @@ def map_yituanno2dict(path):
     file_name = basename(path)
 
     return {
-        "type": "yitu_annotation",
+        "type": "detection",
         "path": path,
         "basename": file_name,
         "label": None
@@ -75,7 +75,7 @@ def parseList(list_file_path, multiprocessing_pool=None):
         file_list.sort(key=lambda item : item['basename'])
         return file_list
 
-def parseYituDet(list_file_path, multiprocessing_pool=None):
+def parseDetectionList(list_file_path, multiprocessing_pool=None):
     with open(list_file_path, 'r') as f:
         file_list = f.read().split("\n")
 

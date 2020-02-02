@@ -56,9 +56,9 @@ def init(request):
                     request.session[token]['path_list'] = parseTSV(current_search, pool)
                     mode = "tsv"
                 
-                elif extension == "yitudet":
-                    request.session[token]['path_list'] = parseYituDet(current_search, pool)
-                    mode = "yitudet"
+                elif extension == "detn":
+                    request.session[token]['path_list'] = parseDetectionList(current_search, pool)
+                    mode = "detection"
         except Exception as e:
             res['code'] = 500
             res['message'] = "Internal server error, failed to parse the search results"
@@ -98,7 +98,8 @@ def get_page(request):
             token = req.get('token')
             filtered = req.get('filtered')
 
-            if page_number == None or current_search == None or token == None or filtered == None:
+            if (page_number == None or current_search == None or \
+                token == None or filtered == None):
                 raise Exception("Invalid POST data")
 
         except Exception as e:
@@ -135,8 +136,9 @@ def get_original_image(request):
         try:
             req = json.loads(request.body.decode("utf-8"))
             img_path = req.get('path')
-           
-            if img_path == None:
+            mode = req.get('mode')
+
+            if img_path == None or mode == None:
                 raise Exception("Invalid POST data")
 
         except Exception as e:
@@ -150,10 +152,8 @@ def get_original_image(request):
             return JsonResponse(res, status=404)
         
         try:
-            extension = img_path.split(".")[-1].lower()
-            
-            if extension == "json":
-                img_data = get_single_image_with_yitu_annotation(img_path, original=True)
+            if mode == 'detection':
+                img_data = get_single_image_with_detection_annotation(img_path, original=True)
             else:
                 img_data = get_single_image(img_path, original=True)
             res['code'] = 200

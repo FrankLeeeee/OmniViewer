@@ -58,7 +58,7 @@ function init_server(path, tk, callback_fn = null) {
         success: function(response) {
             current_page = 1
             total_page = response['data']['total_page']
-
+            mode = response['data']['mode']
             if (callback_fn != null) {
                 callback_fn()
             }
@@ -100,7 +100,7 @@ function render_file_grid(path_list) {
                     notify(`AJAX Error ${path_list[i]['image']['status']}`, `: ${path_list[i]['image']['message']} - ${path_list[i]['path']}`, "danger")
                 }
                 break
-            case "yitu_annotation":
+            case "detection":
                 if (path_list[i]['image']['status'] == 200) {
                     var img_src = String.format("data:img/{0};base64, {1}", extension, path_list[i]['image']['encodedImage'])
                 } else {
@@ -114,7 +114,7 @@ function render_file_grid(path_list) {
             <div class='col-lg-2 col-md-3 col-sm-4 mb-2 text-center'>
                 <div class="p-2 border text-center">
                     <div>
-                        <img src='${img_src}' class='object-grid-image image-fluid object-container' alt='${path_list[i].path}' id='cell-${i}'>
+                        <img src='${img_src}' class='object-grid-image image-fluid object-container' alt='${path_list[i].path}' id='cell-${i}' data-mode='${path_list[i].mode}'>
                     </div>
                     <div class="object-name">
                         <span>${path_list[i].basename}</span>
@@ -125,7 +125,7 @@ function render_file_grid(path_list) {
 
         current_obj = document.getElementById(String.format(`cell-${i}`))
 
-        if (path_list[i].type == "image" || path_list[i].type == "yitu_annotation") {
+        if (path_list[i].type == "image" || path_list[i].type == "detn") {
             current_obj.addEventListener("click", function(evt) {
                 view_large_image(this)
             })
@@ -150,7 +150,13 @@ function render_file_grid(path_list) {
 function load_grid_items(page_number) {
     $('#image-row').empty()
     $('#grid-spinner').show()
-    var data = { page_number: page_number, current_search: current_search, filtered: filtered, token: sessionStorage.getItem("token") }
+    var data = {
+        page_number: page_number,
+        current_search: current_search,
+        filtered: filtered,
+        token: sessionStorage.getItem("token"),
+        mode: mode
+    }
 
     $.ajax({
         url: '/api/getPage/',
@@ -169,8 +175,8 @@ function load_grid_items(page_number) {
 }
 
 /* load single image */
-function load_original_image(img_path, callback) {
-    var data = { path: img_path }
+function load_original_image(img_path, mode, callback) {
+    var data = { path: img_path, mode: mode }
     $("#large-image-modal").css("display", "block")
 
     return $.ajax({
@@ -200,7 +206,8 @@ function view_large_image(element) {
     // document.getElementById("large-image-view").src = element.src
     var img_path = element.alt
     document.getElementById("large-image-view").alt = img_path
-    load_original_image(img_path, load_original_image_callback)
+    var mode = document.getElementById("large-image-view").getAttribute('data-mode')
+    load_original_image(img_path, mode, load_original_image_callback)
 }
 
 /* ================ Pagination ========================== */
