@@ -30,5 +30,5 @@ def viewer(request):
             context['msg'] = "Not acceptable, invalid form data"
             return render(request, "failure.html", context)
 
-def video_page(request):
-    return  render(request, "video.html")
+def show_manual(request):
+    return render(request, 'manual.html')
