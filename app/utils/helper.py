@@ -63,7 +63,7 @@ def get_single_image_with_detection_annotation(path, original=True):
         img = Image.open(img_path)
         extension = img.format
         draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype(join(BASE_DIR, 'static/font/HelveticaLt.ttf'), 14)
+        font = ImageFont.truetype(join(BASE_DIR, 'static/font/HelveticaLt.ttf'), 12)
 
         if detections != None:
             for det in detections:
