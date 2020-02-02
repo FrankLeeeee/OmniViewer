@@ -205,8 +205,8 @@ function load_original_image_callback(img_path, img_response) {
 function view_large_image(element) {
     // document.getElementById("large-image-view").src = element.src
     var img_path = element.alt
+    var type = element.getAttribute('data-type')
     document.getElementById("large-image-view").alt = img_path
-    var type = document.getElementById("large-image-view").getAttribute('data-type')
     load_original_image(img_path, type, load_original_image_callback)
 }
 
