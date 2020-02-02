@@ -10,6 +10,7 @@ import uuid
 import re
 import os
 import mimetypes
+import traceback
 
 pool = Pool(processes=8)
 
@@ -161,7 +162,7 @@ def get_original_image(request):
             res['data'] = img_data
             return JsonResponse(res, status=200)
         except Exception as e:
-            print(e)
+            traceback.print_exc()
             res['code'] = 500
             res['message'] = "Failed to load the image"
             return JsonResponse(res, status=500)
