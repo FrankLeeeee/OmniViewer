@@ -114,7 +114,7 @@ function render_file_grid(path_list) {
             <div class='col-lg-2 col-md-3 col-sm-4 mb-2 text-center'>
                 <div class="p-2 border text-center">
                     <div>
-                        <img src='${img_src}' class='object-grid-image image-fluid object-container' alt='${path_list[i].path}' id='cell-${i}' data-mode='${path_list[i].mode}'>
+                        <img src='${img_src}' class='object-grid-image image-fluid object-container' alt='${path_list[i].path}' id='cell-${i}' data-type='${path_list[i].type}'>
                     </div>
                     <div class="object-name">
                         <span>${path_list[i].basename}</span>
@@ -175,8 +175,8 @@ function load_grid_items(page_number) {
 }
 
 /* load single image */
-function load_original_image(img_path, mode, callback) {
-    var data = { path: img_path, mode: mode }
+function load_original_image(img_path, type, callback) {
+    var data = { path: img_path, type: type }
     $("#large-image-modal").css("display", "block")
 
     return $.ajax({
@@ -206,8 +206,8 @@ function view_large_image(element) {
     // document.getElementById("large-image-view").src = element.src
     var img_path = element.alt
     document.getElementById("large-image-view").alt = img_path
-    var mode = document.getElementById("large-image-view").getAttribute('data-mode')
-    load_original_image(img_path, mode, load_original_image_callback)
+    var type = document.getElementById("large-image-view").getAttribute('data-type')
+    load_original_image(img_path, type, load_original_image_callback)
 }
 
 /* ================ Pagination ========================== */

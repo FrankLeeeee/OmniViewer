@@ -136,9 +136,9 @@ def get_original_image(request):
         try:
             req = json.loads(request.body.decode("utf-8"))
             img_path = req.get('path')
-            mode = req.get('mode')
+            img_type = req.get('type')
 
-            if img_path == None or mode == None:
+            if img_path == None or img_type == None:
                 raise Exception("Invalid POST data")
 
         except Exception as e:
@@ -152,7 +152,7 @@ def get_original_image(request):
             return JsonResponse(res, status=404)
         
         try:
-            if mode == 'detection':
+            if img_type == 'detection':
                 img_data = get_single_image_with_detection_annotation(img_path, original=True)
             else:
                 img_data = get_single_image(img_path, original=True)
