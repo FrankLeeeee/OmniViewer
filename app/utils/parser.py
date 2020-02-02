@@ -71,9 +71,9 @@ def parseList(list_file_path, multiprocessing_pool=None, map_fn=map_dir2dict):
             file_list.pop()
         
         if multiprocessing_pool:
-            file_list = multiprocessing_pool.map(map_dir2dict, file_list)
+            file_list = multiprocessing_pool.map(map_fn, file_list)
         else:
-            file_list = [map_dir2dict(line) for line in file_list]
+            file_list = [map_fn(line) for line in file_list]
         
         file_list.sort(key=lambda item : item['basename'])
         return file_list
