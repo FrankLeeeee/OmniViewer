@@ -83,7 +83,8 @@
 
 /* The Modal (background) */
 
-.modal {
+.speical-modal .modal,
+.speical-modal .modal {
     display: none;
     /* Hidden by default */
     position: fixed;
@@ -109,7 +110,7 @@
 
 /* Modal Content (Image) */
 
-.modal-content {
+.speical-modal .modal .modal-content {
     margin: auto;
     display: block;
     width: 25%;
@@ -133,7 +134,7 @@
 
 /* Add Animation - Zoom in the Modal */
 
-.modal-content,
+.speical-modal .modal .modal-content,
 #large-image-name,
 #large-image-size {
     animation-name: zoom;
@@ -153,18 +154,9 @@
 /* 100% Image Width on Smaller Screens */
 
 @media only screen and (max-width: 700px) {
-    .modal-content {
+    .speical-modal .modal .modal-content {
         width: 100%;
     }
-}
-
-
-/* ========= about me tab ========= */
-
-.feature-container:hover {
-    background-color: #007bff !important;
-    transform: scale(1.05);
-    color: white;
 }
 
 

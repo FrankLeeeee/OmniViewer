@@ -56,6 +56,72 @@
         </div>
     </div>
 
+    <!-- Copyright footer -->
+    <div class="text-center mt-5">
+        <p>&copy; Li Shenggui</p>
+        <a href="https://github.com/FrankLeeeee/OmniViewer">
+            <img class="mb-5" src="../static/images/github-logo.png" height="20px">
+        </a>
+    </div>
 
+    <!-- Update modal -->
+    <div class="modal fade" id="update-modal" tabindex="-1" role="dialog" aria-labelledby="update-modal-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="update-modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+                </div>
+                <div class="modal-body" id="update-modal-body">
+                </div>
+                <div class="modal-footer">
+                    <label class="checkbox-inline ml-3"><input type="checkbox" value='false' class='mr-2' id="show_again_checkbox">Do not show again</label>
+                    <button type="button" class="btn btn-primary" id="update_btn">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Check update -->
+    <script>
+        document.getElementById('update_btn').addEventListener('click', function(event) {
+            if (document.getElementById('show_again_checkbox').checked) {
+                window.localStorage['show_again'] = false
+            } else {
+                window.localStorage['show_again'] = true
+            }
+            $("#update-modal").modal('hide')
+        })
+
+        $(document).ready(function() {
+            $.ajax({
+                url: '/api/update/',
+                type: 'GET',
+                dataType: "json",
+                contentType: 'application/json;charset=UTF-8',
+                success: function(response) {
+                    var version = window.localStorage['version']
+                    var show_again = window.localStorage['show_again']
+                    console.log(show_again)
+                    if (version != response.version || show_again == undefined || show_again) {
+                        window.localStorage['version'] = response.version
+                        document.getElementById("update-modal-title").innerHTML = `新版本 ${response.version}`
+                        var content = document.getElementById("update-modal-body")
+                        var new_features = response.update_log.new_features
+                        var optimization = response.update_log.optimization
+                        var bug_fix = response.update_log.bug_fix
+
+                        content.innerHTML = content.innerHTML + `新增<br>${new_features.join("<br>")}<br><br>优化<br>${optimization.join('<br>')}<br><br>修复<br>${bug_fix.join('<br>')}`
+                        $("#update-modal").modal()
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log("Failed to get update information")
+                }
+            });
+        });
+    </script>
 
 </body>

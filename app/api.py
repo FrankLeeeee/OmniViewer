@@ -398,4 +398,10 @@ def stream_video(request, video_id):
     resp['Accept-Ranges'] = 'bytes'
     return resp
 
-# for AJAX request to get images with detection annotation
+# for update notification
+def get_update(request):
+    data = {
+        "version": version,
+        "update_log": update_log
+    }
+    return JsonResponse(data, status=200)
