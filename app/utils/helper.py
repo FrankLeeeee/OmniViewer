@@ -6,7 +6,7 @@ from app.config.config import *
 from app.utils import annotation
 import math
 
-BASE_DIR = dirname(dirname(abspath(__file__)))
+BASE_DIR = dirname(dirname(dirname(abspath(__file__))))
 
 def get_single_image(path, original=True):
     
@@ -67,24 +67,21 @@ def get_single_image_with_detection_annotation(path, original=True):
 
         if detections != None:
             for det in detections:
-                try:
-                    if det['shape'] == 'rectangleRoi':
-                        draw.rectangle([det['box']['x'], det['box']['y'], det['box']['x']+det['box']['w'], \
-                            det['box']['y']+det['box']['h']], outline="green")
+                if det['shape'] == 'rectangleRoi':
+                    draw.rectangle([det['box']['x'], det['box']['y'], det['box']['x']+det['box']['w'], \
+                        det['box']['y']+det['box']['h']], outline="green")
+                    text = ", ".join([ ",".join(v) for k, v in det['attributes'].items()])
+                    draw.text((det['box']['x'], det['box']['y']), text, font=font, fill='red')
+                elif det['shape'] == 'freehand':
+                    vertex_num = len(det['vertex'])
+                    for i in range(vertex_num):
+                        start = (det['vertex'][i]['x'], det['vertex'][i]['y'])
+                        end = (det['vertex'][(i+1)%vertex_num]['x'], det['vertex'][(i+1)%vertex_num]['y'])
+                        line = [start, end]
+                        draw.line(line, fill='green', width = 1)
+                    if vertex_num > 0:
                         text = ", ".join([ ",".join(v) for k, v in det['attributes'].items()])
-                        draw.text((det['box']['x'], det['box']['y']), text, font=font, fill='red')
-                    elif det['shape'] == 'freehand':
-                        vertex_num = len(det['vertex'])
-                        for i in range(vertex_num):
-                            start = (det['vertex'][i]['x'], det['vertex'][i]['y'])
-                            end = (det['vertex'][(i+1)%vertex_num]['x'], det['vertex'][(i+1)%vertex_num]['y'])
-                            line = [start, end]
-                            draw.line(line, fill='green', width = 1)
-                        if vertex_num > 0:
-                            text = ", ".join([ ",".join(v) for k, v in det['attributes'].items()])
-                            draw.text((det['vertex'][0]['x'], det['vertex'][0]['y']), text, font=font, fill='red')
-                except Exception as e:
-                    print(e) 
+                        draw.text((det['vertex'][0]['x'], det['vertex'][0]['y']), text, font=font, fill='red')
         else:
             draw.text((0,0), "No annotations or failed to load annotations")
               
