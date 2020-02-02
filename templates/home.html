@@ -104,8 +104,8 @@
                 success: function(response) {
                     var version = window.localStorage['version']
                     var show_again = window.localStorage['show_again']
-                    console.log(show_again)
-                    if (version != response.version || show_again == undefined || show_again) {
+
+                    if (version != response.version || show_again == undefined || show_again == "true") {
                         window.localStorage['version'] = response.version
                         document.getElementById("update-modal-title").innerHTML = `新版本 ${response.version}`
                         var content = document.getElementById("update-modal-body")
