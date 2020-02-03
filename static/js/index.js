@@ -251,7 +251,7 @@ function render_pagination() {
 
     $('#page-jump').append(`<form class="form-inline text-center" onsubmit="return go_to_page()">
                                 <div class="input-group w-100">
-                                <input type="number" class="form-control" aria-label="go-to-page" aria-describedby="basic-addon2" id="go-to-page-input" placeholder='Enter a page number (total: ${total_page})'>
+                                <input type="number" class="form-control" aria-label="go-to-page" aria-describedby="basic-addon2" id="go-to-page-input" placeholder="Enter a page number (total: ${total_page})">
                                 <button class="btn btn-outline-primary ml-2" type="submit">Go</button>
                                 </div>
                             </form>`)
