@@ -195,35 +195,54 @@ function load_original_image(img_path, type, callback) {
 }
 
 function load_original_image_callback(img_path, type, img_response) {
-    // var large_image_onload_fn = function() {
-    //     $('#large-image-canvas').width($("#large-image-view").width())
-    //     $('#large-image-canvas').height($("#large-image-view").height())
-    //     console.log(type)
-    //     if (type != "detection") {
-    //         var ctx = document.getElementById('large-image-canvas').getContext('2d')
-    //         ctx.lineWidth = "5";
-    //         ctx.strokeStyle = "red";
-    //         ctx.beginPath();
-    //         ctx.rect(5, 5, 100, 100);
-    //         ctx.stroke();
-    //     }
-    // }
-
-    // $("#large-image-view").one('load', large_image_onload_fn)
-
     var extension = img_path.split('.').pop().toLowerCase()
     $("#large-image-view").attr("src", String.format("data:img/{0};base64, {1}", extension, img_response['data']['encodedImage']))
     $("#large-image-view").attr("width", "50%")
     $("#large-image-name").text(`${img_path}`)
     $("#large-image-size").text(`${img_response['data']['size'][0]} x ${img_response['data']['size'][1]}`)
 
-    if (type != "detection") {
+    if (type == "detection") {
         var ctx = document.getElementById('large-image-canvas').getContext('2d')
-        ctx.lineWidth = "5";
-        ctx.strokeStyle = "red";
-        ctx.beginPath();
-        ctx.rect(5, 5, 100, 100);
-        ctx.stroke();
+        ctx.lineWidth = "2"
+        ctx.strokeStyle = "green"
+        ctx.fillStyle = "red"
+        ctx.font = "12px Arial"
+
+        if (response.data.detection.length == undefined || response.data.detection.length == 0) {
+            ctx.fillText("No labels are found", 0, 0);
+        } else {
+            ctx.beginPath()
+
+            response.data.detection.forEach(val => {
+                var text_x = 0
+                var text_y = 0
+
+                if (val.shape == 'rectangleRoi') {
+                    ctx.rect(val.box.x, val.box.y, val.box.x + val.box.w, val.box.y + val.box.h);
+                    ctx.stroke();
+                    text_x = val.box.x
+                    text_y = val.box.y - 5
+                } else if (val.shape == 'freehand') {
+                    var pts_num = val.vertex.length
+                    for (var i = 0; i < pts_num; i++) {
+                        ctx.moveTo(val.vertex[i].x, val.vertex[i].y)
+                        ctx.lineTo(val.vertex[(i + 1) % pts_num].x, val.vertex[(i + 1) % pts_num].y)
+                    }
+                    text_x = val.vertex[0].x
+                    text_y = val.vertex[0].y - 5
+                    ctx.stroke()
+                }
+
+                var attrs = []
+
+                val.attributes.forEach(item => {
+                    attrs.append(item.attr_name.join(', '))
+                })
+
+                var text = attrs.join(', ')
+                ctx.fillText(text, text_x, text_y)
+            })
+        }
     }
 }
 

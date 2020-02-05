@@ -202,6 +202,9 @@
                 $("#large-image-canvas").click(function() {
                     $("#large-image-modal").css("display", "none")
                     $("#large-image-view").attr("src", "../static/images/loader.svg")
+                    var canvas = document.getElementById('large-image-canvas')
+                    var ctx = canvas.getContext('2d')
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
                 });
 
                 $("#large-image-view").on('load', function() {
