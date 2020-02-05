@@ -150,6 +150,22 @@
     }
 }
 
+.large-image-container {
+    display: inline-block;
+    position: relative;
+}
+
+#large-image-view {
+    position: absolute;
+    z-index: 99;
+}
+
+#large-image-canvas {
+    position: relative;
+    z-index: 109;
+    margin: auto;
+}
+
 
 /* 100% Image Width on Smaller Screens */
 

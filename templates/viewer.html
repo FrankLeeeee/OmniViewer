@@ -14,7 +14,6 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
     <script src="/static/js/bootstrap-notify.min.js"></script>
-
     <script src="/static/js/index.js?v=0.4.2"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="/static/css/style.css?v=0.4">
@@ -194,13 +193,26 @@
                 <div class="mt-1 mb-2" id="large-image-size"></div>
             </div>
 
-            <img class="modal-content mb-3" id="large-image-view" src="../static/images/loader.svg">
+            <div class="large-image-container d-flex justify-content-center">
+                <img class="modal-content mb-3" id="large-image-view" src="../static/images/loader.svg">
+                <canvas class="modal-content" id="large-image-canvas"></canvas>
+            </div>
 
             <script>
-                $("#large-image-view").click(function() {
+                $("#large-image-canvas").click(function() {
                     $("#large-image-modal").css("display", "none")
                     $("#large-image-view").attr("src", "../static/images/loader.svg")
                 });
+
+                $("#large-image-view").on('load', function() {
+                    $('#large-image-canvas').width($("#large-image-view").width())
+                    $('#large-image-canvas').height($("#large-image-view").height())
+                })
+
+                $("#large-image-view").resize(function() {
+                    $('#large-image-canvas').width($("#large-image-view").width())
+                    $('#large-image-canvas').height($("#large-image-view").height())
+                })
             </script>
         </div>
     </div>

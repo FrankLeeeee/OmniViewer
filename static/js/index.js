@@ -186,7 +186,7 @@ function load_original_image(img_path, type, callback) {
         dataType: "json",
         contentType: 'application/json;charset=UTF-8',
         success: function(response) {
-            callback(img_path, response)
+            callback(img_path, type, response)
         },
         error: function(xhr, status, error) {
             notify(`AJAX Error ${xhr.status}:`, `${error} - ${img_path}`, "danger")
@@ -194,11 +194,37 @@ function load_original_image(img_path, type, callback) {
     });
 }
 
-function load_original_image_callback(img_path, img_response) {
+function load_original_image_callback(img_path, type, img_response) {
+    // var large_image_onload_fn = function() {
+    //     $('#large-image-canvas').width($("#large-image-view").width())
+    //     $('#large-image-canvas').height($("#large-image-view").height())
+    //     console.log(type)
+    //     if (type != "detection") {
+    //         var ctx = document.getElementById('large-image-canvas').getContext('2d')
+    //         ctx.lineWidth = "5";
+    //         ctx.strokeStyle = "red";
+    //         ctx.beginPath();
+    //         ctx.rect(5, 5, 100, 100);
+    //         ctx.stroke();
+    //     }
+    // }
+
+    // $("#large-image-view").one('load', large_image_onload_fn)
+
     var extension = img_path.split('.').pop().toLowerCase()
     $("#large-image-view").attr("src", String.format("data:img/{0};base64, {1}", extension, img_response['data']['encodedImage']))
+    $("#large-image-view").attr("width", "50%")
     $("#large-image-name").text(`${img_path}`)
     $("#large-image-size").text(`${img_response['data']['size'][0]} x ${img_response['data']['size'][1]}`)
+
+    if (type != "detection") {
+        var ctx = document.getElementById('large-image-canvas').getContext('2d')
+        ctx.lineWidth = "5";
+        ctx.strokeStyle = "red";
+        ctx.beginPath();
+        ctx.rect(5, 5, 100, 100);
+        ctx.stroke();
+    }
 }
 
 /* onclick function for image */
@@ -460,12 +486,16 @@ function internal_search() {
 function zoom_out_large_image_modal() {
     var img_width = $("#large-image-view").width()
     $("#large-image-view").width(Math.ceil(img_width / 1.5))
+    $('#large-image-canvas').width($("#large-image-view").width())
+    $('#large-image-canvas').height($("#large-image-view").height())
 }
 
 /* zoom in the image */
 function zoom_in_large_image_modal() {
     var img_width = $("#large-image-view").width()
     $("#large-image-view").width(Math.ceil(img_width * 1.5))
+    $('#large-image-canvas').width($("#large-image-view").width())
+    $('#large-image-canvas').height($("#large-image-view").height())
 }
 
 function download_file_onclick() {

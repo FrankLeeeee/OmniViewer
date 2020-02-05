@@ -154,7 +154,7 @@ def get_original_image(request):
         
         try:
             if img_type == 'detection':
-                img_data = get_single_image_with_detection_annotation(img_path, original=True)
+                img_data = get_single_image_and_detection_annotation(img_path, original=True)
             else:
                 img_data = get_single_image(img_path, original=True)
             res['code'] = 200
