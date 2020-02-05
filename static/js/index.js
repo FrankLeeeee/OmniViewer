@@ -197,7 +197,7 @@ function load_original_image(img_path, type, callback) {
 function load_original_image_callback(img_path, type, img_response) {
     var extension = img_path.split('.').pop().toLowerCase()
     $("#large-image-view").attr("src", String.format("data:img/{0};base64, {1}", extension, img_response['data']['encodedImage']))
-    $("#large-image-view").attr("width", "50%")
+    $("#large-image-view").width("50%")
     $("#large-image-name").text(`${img_path}`)
     $("#large-image-size").text(`${img_response['data']['size'][0]} x ${img_response['data']['size'][1]}`)
 
