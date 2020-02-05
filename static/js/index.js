@@ -222,8 +222,8 @@ function load_original_image_callback(img_path, type, img_response) {
                 if (val.shape == 'rectangleRoi') {
                     ctx.strokeRect(val.box.x / img_response.data.size[0] * canvas.width,
                         val.box.y / img_response.data.size[1] * canvas.height,
-                        (val.box.x + val.box.w) / img_response.data.size[0] * canvas.width,
-                        (val.box.y + val.box.h) / img_response.data.size[1] * canvas.height)
+                        val.box.w / img_response.data.size[0] * canvas.width,
+                        val.box.h / img_response.data.size[1] * canvas.height)
                     text_x = val.box.x
                     text_y = val.box.y - 5
 
