@@ -227,7 +227,7 @@ function load_original_image_callback(img_path, type, img_response) {
 
                     ctx.strokeRect(x, y, w, h)
                     text_x = x
-                    text_y = y - 5
+                    text_y = y - 2
 
                 } else if (val.shape == 'freehand') {
                     ctx.beginPath()
