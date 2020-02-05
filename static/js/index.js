@@ -220,29 +220,33 @@ function load_original_image_callback(img_path, type, img_response) {
                 var text_y = 0
 
                 if (val.shape == 'rectangleRoi') {
-                    ctx.strokeRect(val.box.x / img_response.data.size[0] * canvas.width,
-                        val.box.y / img_response.data.size[1] * canvas.height,
-                        val.box.w / img_response.data.size[0] * canvas.width,
-                        val.box.h / img_response.data.size[1] * canvas.height)
-                    text_x = val.box.x
-                    text_y = val.box.y - 5
+                    var x = val.box.x / img_response.data.size[0] * canvas.width
+                    var y = val.box.y / img_response.data.size[1] * canvas.height
+                    var w = val.box.w / img_response.data.size[0] * canvas.width
+                    var h = val.box.h / img_response.data.size[1] * canvas.height
+
+                    ctx.strokeRect(x, y, w, h)
+                    text_x = x
+                    text_y = y - 5
 
                 } else if (val.shape == 'freehand') {
                     ctx.beginPath()
                     var pts_num = val.vertex.length
                     for (var i = 0; i < pts_num; i++) {
-                        ctx.moveTo(val.vertex[i].x / img_response.data.size[0] * canvas.width,
-                            val.vertex[i].y / img_response.data.size[1] * canvas.height)
-                        ctx.lineTo(val.vertex[(i + 1) % pts_num].x / img_response.data.size[0] * canvas.width,
-                            val.vertex[(i + 1) % pts_num].y / img_response.data.size[1] * canvas.height)
+                        var x1 = val.vertex[i].x / img_response.data.size[0] * canvas.width
+                        var y1 = val.vertex[i].y / img_response.data.size[1] * canvas.height
+                        var x2 = val.vertex[(i + 1) % pts_num].x / img_response.data.size[0] * canvas.width
+                        var y2 = val.vertex[(i + 1) % pts_num].y / img_response.data.size[1] * canvas.height
+                        ctx.moveTo(x1, y1)
+                        ctx.lineTo(x2, y2)
                     }
-                    text_x = val.vertex[0].x
-                    text_y = val.vertex[0].y - 5
+                    text_x = val.vertex[0].x / img_response.data.size[0] * canvas.width
+                    text_y = val.vertex[0].y / img_response.data.size[1] * canvas.height - 5
                     ctx.stroke()
                 }
 
                 var attrs = []
-                console.log(val)
+
                 $.each(val.attributes, function(k, v) {
                     attrs.push(v.join(', '))
                 })
