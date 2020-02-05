@@ -202,7 +202,8 @@ function load_original_image_callback(img_path, type, img_response) {
     $("#large-image-size").text(`${img_response['data']['size'][0]} x ${img_response['data']['size'][1]}`)
 
     if (type == "detection") {
-        var ctx = document.getElementById('large-image-canvas').getContext('2d')
+        var canvas = document.getElementById('large-image-canvas')
+        var ctx = canvas.getContext('2d')
         ctx.lineWidth = "2"
         ctx.strokeStyle = "green"
         ctx.fillStyle = "red"
@@ -218,15 +219,21 @@ function load_original_image_callback(img_path, type, img_response) {
                 var text_y = 0
 
                 if (val.shape == 'rectangleRoi') {
-                    ctx.rect(val.box.x, val.box.y, val.box.x + val.box.w, val.box.y + val.box.h);
-                    ctx.stroke();
+                    ctx.rect(val.box.x / img_response.data.size[0] * canvas.width,
+                        val.box.y / img_response.data.size[1] * canvas.height,
+                        (val.box.x + val.box.w) / img_response.data.size[0] * canvas.width,
+                        (val.box.y + val.box.h) / img_response.data.size[1] * canvas.height)
+                    ctx.stroke()
                     text_x = val.box.x
                     text_y = val.box.y - 5
+
                 } else if (val.shape == 'freehand') {
                     var pts_num = val.vertex.length
                     for (var i = 0; i < pts_num; i++) {
-                        ctx.moveTo(val.vertex[i].x, val.vertex[i].y)
-                        ctx.lineTo(val.vertex[(i + 1) % pts_num].x, val.vertex[(i + 1) % pts_num].y)
+                        ctx.moveTo(val.vertex[i].x / img_response.data.size[0] * canvas.width,
+                            val.vertex[i].y / img_response.data.size[1] * canvas.height)
+                        ctx.lineTo(val.vertex[(i + 1) % pts_num].x / img_response.data.size[0] * canvas.width,
+                            val.vertex[(i + 1) % pts_num].y / img_response.data.size[1] * canvas.height)
                     }
                     text_x = val.vertex[0].x
                     text_y = val.vertex[0].y - 5
@@ -234,7 +241,7 @@ function load_original_image_callback(img_path, type, img_response) {
                 }
 
                 var attrs = []
-
+                console.log(val)
                 val.attributes.forEach(item => {
                     attrs.append(item.attr_name.join(', '))
                 })
