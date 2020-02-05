@@ -215,7 +215,7 @@ function load_original_image_callback(img_path, type, img_response) {
             ctx.fillText("No labels are found", 0, 0);
         } else {
 
-            $.each(img_response.data.detection, val => {
+            $.each(img_response.data.detection, function(key, val) {
                 var text_x = 0
                 var text_y = 0
 
