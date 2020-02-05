@@ -201,6 +201,8 @@ function load_original_image_callback(img_path, type, img_response) {
     $("#large-image-name").text(`${img_path}`)
     $("#large-image-size").text(`${img_response['data']['size'][0]} x ${img_response['data']['size'][1]}`)
 
+    console.log(img_response)
+
     if (type == "detection") {
         var canvas = document.getElementById('large-image-canvas')
         var ctx = canvas.getContext('2d')
@@ -212,22 +214,21 @@ function load_original_image_callback(img_path, type, img_response) {
         if (img_response.data.detection.length == undefined || img_response.data.detection.length == 0) {
             ctx.fillText("No labels are found", 0, 0);
         } else {
-            ctx.beginPath()
 
-            img_response.data.detection.forEach(val => {
+            $.each(img_response.data.detection, val => {
                 var text_x = 0
                 var text_y = 0
 
                 if (val.shape == 'rectangleRoi') {
-                    ctx.rect(val.box.x / img_response.data.size[0] * canvas.width,
+                    ctx.strokeRect(val.box.x / img_response.data.size[0] * canvas.width,
                         val.box.y / img_response.data.size[1] * canvas.height,
                         (val.box.x + val.box.w) / img_response.data.size[0] * canvas.width,
                         (val.box.y + val.box.h) / img_response.data.size[1] * canvas.height)
-                    ctx.stroke()
                     text_x = val.box.x
                     text_y = val.box.y - 5
 
                 } else if (val.shape == 'freehand') {
+                    ctx.beginPath()
                     var pts_num = val.vertex.length
                     for (var i = 0; i < pts_num; i++) {
                         ctx.moveTo(val.vertex[i].x / img_response.data.size[0] * canvas.width,
@@ -242,8 +243,8 @@ function load_original_image_callback(img_path, type, img_response) {
 
                 var attrs = []
                 console.log(val)
-                val.attributes.forEach(item => {
-                    attrs.append(item.attr_name.join(', '))
+                $.each(val.attributes, function(k, v) {
+                    attrs.append(v.join(', '))
                 })
 
                 var text = attrs.join(', ')
