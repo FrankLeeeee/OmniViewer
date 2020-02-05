@@ -244,7 +244,7 @@ function load_original_image_callback(img_path, type, img_response) {
                 var attrs = []
                 console.log(val)
                 $.each(val.attributes, function(k, v) {
-                    attrs.append(v.join(', '))
+                    attrs.push(v.join(', '))
                 })
 
                 var text = attrs.join(', ')
