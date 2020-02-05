@@ -208,12 +208,12 @@ function load_original_image_callback(img_path, type, img_response) {
         ctx.fillStyle = "red"
         ctx.font = "12px Arial"
 
-        if (img_response.data.detection.length == undefined || response.data.detection.length == 0) {
+        if (img_response.data.detection.length == undefined || img_response.data.detection.length == 0) {
             ctx.fillText("No labels are found", 0, 0);
         } else {
             ctx.beginPath()
 
-            response.data.detection.forEach(val => {
+            img_response.data.detection.forEach(val => {
                 var text_x = 0
                 var text_y = 0
 
