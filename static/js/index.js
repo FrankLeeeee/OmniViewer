@@ -28,9 +28,9 @@ function generate_id() {
 
 /* page initialization */
 $(document).ready(function() {
-    load_current_search()
     init_token()
     init_server(current_search, sessionStorage.getItem("token"), load_page)
+    load_current_search()
 });
 
 

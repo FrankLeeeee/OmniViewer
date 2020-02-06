@@ -64,14 +64,14 @@ def get_single_image_with_detection_annotation(path, original=True):
         extension = img.format
         draw = ImageDraw.Draw(img)
         font = ImageFont.truetype(join(BASE_DIR, 'static/font/helvetica.ttf'), 12)
-
+        font_height = font.getsize('A')[1]
         if detections != None:
             for det in detections:
                 if det['shape'] == 'rectangleRoi':
                     draw.rectangle([det['box']['x'], det['box']['y'], det['box']['x']+det['box']['w'], \
                         det['box']['y']+det['box']['h']], outline="green")
                     text = ", ".join([ ",".join(v) for k, v in det['attributes'].items()])
-                    draw.text((det['box']['x'], det['box']['y']), text, font=font, fill='red')
+                    draw.text((det['box']['x'], det['box']['y']-font_height), text, font=font, fill='red')
                 elif det['shape'] == 'freehand':
                     vertex_num = len(det['vertex'])
                     for i in range(vertex_num):
@@ -81,7 +81,7 @@ def get_single_image_with_detection_annotation(path, original=True):
                         draw.line(line, fill='green', width = 1)
                     if vertex_num > 0:
                         text = ", ".join([ ",".join(v) for k, v in det['attributes'].items()])
-                        draw.text((det['vertex'][0]['x'], det['vertex'][0]['y']), text, font=font, fill='red')
+                        draw.text((det['vertex'][0]['x'], det['vertex'][0]['y']-font_height), text, font=font, fill='red')
         else:
             draw.text((0,0), "No annotations or failed to load annotations")
               
