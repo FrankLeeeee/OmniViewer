@@ -29,7 +29,7 @@ class SearchPath extends React.Component {
       return (
         <span key={idx}>
           <span>/</span>
-          <a type="btn" href="#" data-idx={idx} onClick={this.change_dir}>
+          <a href="#" data-idx={idx} onClick={this.change_dir}>
             {item}
           </a>
         </span>
@@ -38,6 +38,7 @@ class SearchPath extends React.Component {
   };
 
   change_dir = (e) => {
+    e.preventDefault();
     var idx = parseInt(e.target.getAttribute("data-idx")) + 1;
     var comps = this.state.path_split.slice(0, idx);
     var path = "/" + comps.join("/");
