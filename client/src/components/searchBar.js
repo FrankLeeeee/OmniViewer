@@ -4,6 +4,7 @@ import "../static/style.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { withRouter } from "react-router-dom";
+import utils from "../utils";
 
 class SearchBar extends React.Component {
   state = {
@@ -12,8 +13,9 @@ class SearchBar extends React.Component {
 
   onFormSubmit = (e) => {
     e.preventDefault();
-    var path = new Buffer(this.state.query).toString("base64");
-    var url = "/view?dir=" + path;
+    var path = utils.acsiiToBase64(this.state.query);
+    var url = `/view?dir=${path}#`;
+    console.log(url);
     this.props.history.push(url);
   };
 

@@ -17,6 +17,16 @@ function getToken() {
   }
 }
 
+function acsiiToBase64(str_acsii) {
+  return new Buffer(str_acsii).toString("base64");
+}
+
+function base64ToAscii(str_base64) {
+  return new Buffer(str_base64, "base64").toString("ascii");
+}
+
 export default {
   getToken: getToken,
+  acsiiToBase64: acsiiToBase64,
+  base64ToAscii: base64ToAscii,
 };
