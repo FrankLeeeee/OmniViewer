@@ -1,3 +1,6 @@
+import queryString from "query-string";
+import qs from "query-string";
+
 function getToken() {
   if (sessionStorage.token == undefined) {
     fetch("http://127.0.0.1:8000/api/getToken", {
@@ -25,8 +28,18 @@ function base64ToAscii(str_base64) {
   return new Buffer(str_base64, "base64").toString("ascii");
 }
 
+function parseQueryString(urlSearch) {
+  return queryString.parse(urlSearch);
+}
+
+function stringifyUrlQuery(query_json) {
+  return qs.stringify(query_json);
+}
+
 export default {
   getToken: getToken,
   acsiiToBase64: acsiiToBase64,
   base64ToAscii: base64ToAscii,
+  parseQueryString: parseQueryString,
+  stringifyUrlQuery: stringifyUrlQuery,
 };
