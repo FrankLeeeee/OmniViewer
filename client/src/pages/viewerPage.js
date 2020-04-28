@@ -15,42 +15,100 @@ export default class ViewerPage extends React.Component {
   constructor(props) {
     super(props);
 
-    var query = this.getDirFromUrlSearch(props.location.search);
+    // set state based on url
+    var query = this.parseUrlQuery(props.location.search);
 
     this.state = {
-      current_search: query,
+      query: {
+        current_search: query.dir,
+        keyword: query.keyword,
+        current_page: query.page,
+      },
       total_page: 0,
-      current_page: 1,
-      mode: "",
     };
   }
 
-  componentWillMount() {
-    utils.getToken();
-    this.init();
-  }
-
   componentDidMount() {
+    // init token and path info when first loaded
+    utils.getToken();
+    this.init_server();
+
+    // Set the listener for url change
+
     this.unlisten = this.props.history.listen((location, action) => {
-      var query = this.getDirFromUrlSearch(location.search);
-      console.log(query);
-      this.setState({
-        current_search: query,
-      });
+      var query = this.parseUrlQuery(location.search);
+
+      // if visiting a new path
+      if (query.dir != this.state.query.current_page) {
+        this.setState(
+          {
+            query: {
+              current_search: query.dir,
+              keyword: "",
+              zd: 0,
+            },
+            total_page: 1,
+          },
+          this.init_server
+        );
+      }
+
+      // if keyword changes
+      if (
+        query.keyword != undefined &&
+        query.keyword != this.state.query.keyword
+      ) {
+        this.setState({
+          query: {
+            keyword: query.keyword,
+          },
+        });
+      }
+
+      // if page changes
+      if (
+        query.page != undefined &&
+        query.page != this.state.query.current_page
+      ) {
+        this.setState({
+          query: {
+            current_page: query.page,
+          },
+        });
+      }
     });
   }
 
-  getDirFromUrlSearch = (urlSearch) => {
-    const queryBase64 = utils.parseQueryString(urlSearch).dir;
+  parseUrlQuery = (urlSearch) => {
+    // get state from url
 
-    if (queryBase64 == undefined) {
-      this.props.history.push("/error?status=405");
+    const query = utils.parseQueryString(urlSearch);
+    var res = {};
+
+    if (query.dir == undefined) {
+      res.dir = "";
     } else {
-      return utils.base64ToAscii(queryBase64);
+      res.dir = utils.base64ToAscii(query.dir);
     }
+
+    if (query.keyword == undefined) {
+      res.keyword = "";
+    } else {
+      res.keyword = utils.base64ToAscii(query.keyword);
+    }
+
+    if (query.page == undefined) {
+      res.page = 1;
+    } else {
+      res.page = parseInt(query.page);
+    }
+
+    return res;
   };
 
-  init = () => {
+  init_server = () => {
+    // set up path content on server side
+
     fetch("http://127.0.0.1:8000/api/init/", {
       method: "POST",
       headers: {
@@ -67,15 +125,16 @@ export default class ViewerPage extends React.Component {
       .then((res) => {
         console.log(res);
         if (res.code != 200) {
-          history.push(`/error?status=${res.code}`);
+          this.props.history.push(`/error?status=${res.code}`);
         } else {
           this.setState({
             total_page: res.data.totol_page,
-            mode: res.data.mode,
           });
         }
       });
   };
+
+  render_page = () => {};
 
   render() {
     return (
@@ -110,7 +169,6 @@ export default class ViewerPage extends React.Component {
                       <Row>
                         <Col>
                           <SearchPath path={this.state.current_search} />
-                          <KeywordFilter />
                         </Col>
                       </Row>
                     </Tab.Pane>

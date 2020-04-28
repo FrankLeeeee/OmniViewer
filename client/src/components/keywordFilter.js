@@ -7,19 +7,9 @@ class KeywordFilter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      keyword: this.getKeywordFromURLSearch(props.location.search),
+      keyword: props.keyword,
     };
   }
-
-  getKeywordFromURLSearch = (urlSearch) => {
-    var keyword = utils.parseQueryString(urlSearch).keyword;
-
-    if (keyword == undefined || keyword == "") {
-      return "";
-    } else {
-      return utils.base64ToAscii(keyword);
-    }
-  };
 
   onKeywordChange = (e) => {
     e.preventDefault();
