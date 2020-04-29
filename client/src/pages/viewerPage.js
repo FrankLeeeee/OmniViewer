@@ -10,76 +10,37 @@ import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import { connect } from "react-redux";
+import { set_token, set_query } from "../redux/actions";
 
-export default class ViewerPage extends React.Component {
+class ViewerPage extends React.Component {
   constructor(props) {
     super(props);
 
     // set state based on url
-    var query = this.parseUrlQuery(props.location.search);
-
-    this.state = {
-      query: {
-        current_search: query.dir,
-        keyword: query.keyword,
-        current_page: query.page,
-      },
-      total_page: 0,
-    };
+    var query = this.parseURL(props.location.search);
+    props.dispatch(set_query(query.dir, query.page, query.keyword));
   }
 
   componentDidMount() {
     // init token and path info when first loaded
-    utils.getToken();
-    this.init_server();
+    utils.getToken((tk) => {
+      this.props.dispatch(set_token(tk));
+    });
 
-    // Set the listener for url change
-
+    // this.init_server();
     this.unlisten = this.props.history.listen((location, action) => {
-      var query = this.parseUrlQuery(location.search);
+      var query = this.parseURL(location.search);
 
       // if visiting a new path
-      if (query.dir != this.state.query.current_page) {
-        this.setState(
-          {
-            query: {
-              current_search: query.dir,
-              keyword: "",
-              zd: 0,
-            },
-            total_page: 1,
-          },
-          this.init_server
-        );
-      }
-
-      // if keyword changes
-      if (
-        query.keyword != undefined &&
-        query.keyword != this.state.query.keyword
-      ) {
-        this.setState({
-          query: {
-            keyword: query.keyword,
-          },
-        });
-      }
-
-      // if page changes
-      if (
-        query.page != undefined &&
-        query.page != this.state.query.current_page
-      ) {
-        this.setState({
-          query: {
-            current_page: query.page,
-          },
-        });
+      var current_state = window.store.getState();
+      if (query.dir != current_state.query.current_path) {
+        this.props.dispatch(set_query(query.dir, 0, ""));
       }
     });
   }
 
-  parseUrlQuery = (urlSearch) => {
+  parseURL = (urlSearch) => {
     // get state from url
 
     const query = utils.parseQueryString(urlSearch);
@@ -106,35 +67,33 @@ export default class ViewerPage extends React.Component {
     return res;
   };
 
-  init_server = () => {
-    // set up path content on server side
+  // init_server = () => {
+  //   // set up path content on server side
 
-    fetch("http://127.0.0.1:8000/api/init/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        current_search: this.state.current_search,
-        token: sessionStorage.token,
-      }),
-      mode: "cors",
-      cache: "no-cache",
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        if (res.code != 200) {
-          this.props.history.push(`/error?status=${res.code}`);
-        } else {
-          this.setState({
-            total_page: res.data.totol_page,
-          });
-        }
-      });
-  };
-
-  render_page = () => {};
+  //   fetch("http://127.0.0.1:8000/api/init/", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       current_search: this.state.current_search,
+  //       token: sessionStorage.token,
+  //     }),
+  //     mode: "cors",
+  //     cache: "no-cache",
+  //   })
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       console.log(res);
+  //       if (res.code != 200) {
+  //         // this.props.history.push(`/error?status=${res.code}`);
+  //       } else {
+  //         this.setState({
+  //           total_page: res.data.totol_page,
+  //         });
+  //       }
+  //     });
+  // };
 
   render() {
     return (
@@ -168,7 +127,7 @@ export default class ViewerPage extends React.Component {
                     <Tab.Pane eventKey="viewer">
                       <Row>
                         <Col>
-                          <SearchPath path={this.state.current_search} />
+                          <SearchPath />
                         </Col>
                       </Row>
                     </Tab.Pane>
@@ -183,3 +142,5 @@ export default class ViewerPage extends React.Component {
     );
   }
 }
+
+export default connect()(ViewerPage);

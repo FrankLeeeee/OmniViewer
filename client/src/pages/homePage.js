@@ -7,10 +7,14 @@ import CopyrightFooter from "../components/copyrightFooter";
 import HomeLogo from "../components/homeLogo";
 import UpdateModal from "../components/updateModal";
 import utils from "../utils";
+import { connect } from "react-redux";
+import { set_token } from "../redux/actions";
 
-export default class HomePage extends React.Component {
-  componentWillMount() {
-    utils.getToken();
+class HomePage extends React.Component {
+  componentDidMount() {
+    utils.getToken((tk) => {
+      this.props.dispatch(set_token(tk));
+    });
   }
 
   render() {
@@ -25,3 +29,5 @@ export default class HomePage extends React.Component {
     );
   }
 }
+
+export default connect()(HomePage);

@@ -2,30 +2,11 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import utils from "../utils";
 import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 
 class SearchPath extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      path_split: [],
-    };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.path == undefined) {
-      var path_split = [];
-    } else {
-      var path_split = nextProps.path.split("/");
-      var path_split = path_split.filter((word) => word != "");
-    }
-
-    this.setState({
-      path_split: path_split,
-    });
-  }
-
   render_path = () => {
-    return this.state.path_split.map((item, idx) => {
+    return this.props.path_split.map((item, idx) => {
       return (
         <span key={idx}>
           <span>/</span>
@@ -40,7 +21,7 @@ class SearchPath extends React.Component {
   change_dir = (e) => {
     e.preventDefault();
     var idx = parseInt(e.target.getAttribute("data-idx")) + 1;
-    var comps = this.state.path_split.slice(0, idx);
+    var comps = this.props.path_split.slice(0, idx);
     var path = "/" + comps.join("/");
     var path_base64 = utils.acsiiToBase64(path);
     this.props.history.push({
@@ -59,4 +40,14 @@ class SearchPath extends React.Component {
   }
 }
 
-export default withRouter(SearchPath);
+const mapStateToProps = (state) => {
+  if (state.query.current_path == undefined) {
+    var path_split = [];
+  } else {
+    var path_split = state.query.current_path.split("/");
+    var path_split = path_split.filter((word) => word != "");
+  }
+  return { path_split: path_split };
+};
+
+export default withRouter(connect(mapStateToProps)(SearchPath));

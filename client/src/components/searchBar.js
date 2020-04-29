@@ -15,7 +15,6 @@ class SearchBar extends React.Component {
     e.preventDefault();
     var path = utils.acsiiToBase64(this.state.query);
     var url = `/view?dir=${path}#`;
-    console.log(url);
     this.props.history.push(url);
   };
 

@@ -1,8 +1,9 @@
 import queryString from "query-string";
 import qs from "query-string";
 
-function getToken() {
-  if (sessionStorage.token == undefined) {
+function getToken(callback = null) {
+  var state = window.store.getState();
+  if (state.query.token == "" || state.query.token == undefined) {
     fetch("http://127.0.0.1:8000/api/getToken", {
       method: "GET",
       headers: {
@@ -13,7 +14,7 @@ function getToken() {
         console.log("token获取失败");
       } else {
         res.json().then((res) => {
-          sessionStorage.setItem("token", res.token);
+          callback(res.token);
         });
       }
     });
