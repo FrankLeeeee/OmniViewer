@@ -4,6 +4,7 @@ import "../static/style.css";
 import NavBar from "../components/navBar";
 import SearchBarOnViewer from "../components/searchBarOnViewer";
 import SearchPath from "../components/searchPath";
+import Pagination from "../components/pagination";
 import KeywordFilter from "../components/keywordFilter";
 import utils from "../utils";
 import Tab from "react-bootstrap/Tab";
@@ -11,89 +12,70 @@ import Nav from "react-bootstrap/Nav";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { connect } from "react-redux";
-import { set_token, set_query } from "../redux/actions";
+import {
+  set_token,
+  set_query,
+  set_total_page,
+  set_current_page,
+} from "../redux/actions";
 
 class ViewerPage extends React.Component {
   constructor(props) {
     super(props);
 
     // set state based on url
-    var query = this.parseURL(props.location.search);
+    var query = utils.parseURL(props.location.search);
     props.dispatch(set_query(query.dir, query.page, query.keyword));
   }
 
-  componentDidMount() {
+  componentWillMount() {
     // init token and path info when first loaded
     utils.getToken((tk) => {
       this.props.dispatch(set_token(tk));
     });
 
-    // this.init_server();
+    this.init_server();
+
     this.unlisten = this.props.history.listen((location, action) => {
-      var query = this.parseURL(location.search);
+      var query = utils.parseURL(location.search);
+      var current_state = window.store.getState();
 
       // if visiting a new path
-      var current_state = window.store.getState();
       if (query.dir != current_state.query.current_path) {
-        this.props.dispatch(set_query(query.dir, 0, ""));
+        this.props.dispatch(set_query(query.dir, 1, ""));
+        this.init_server();
+      } else if (query.page != current_state.query.current_page) {
+        this.props.dispatch(set_current_page(query.page));
       }
     });
   }
 
-  parseURL = (urlSearch) => {
-    // get state from url
+  init_server = () => {
+    // set up path content on server side
+    var store = window.store.getState();
 
-    const query = utils.parseQueryString(urlSearch);
-    var res = {};
-
-    if (query.dir == undefined) {
-      res.dir = "";
-    } else {
-      res.dir = utils.base64ToAscii(query.dir);
-    }
-
-    if (query.keyword == undefined) {
-      res.keyword = "";
-    } else {
-      res.keyword = utils.base64ToAscii(query.keyword);
-    }
-
-    if (query.page == undefined) {
-      res.page = 1;
-    } else {
-      res.page = parseInt(query.page);
-    }
-
-    return res;
+    fetch("http://127.0.0.1:8000/api/init/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        current_search: store.query.current_path,
+        token: store.token,
+      }),
+      mode: "cors",
+      cache: "no-cache",
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.code != 200) {
+          alert(res.code);
+          // this.props.history.push(`/error?status=${res.code}`);
+        } else {
+          this.props.dispatch(set_total_page(res.data.total_page));
+        }
+      });
   };
-
-  // init_server = () => {
-  //   // set up path content on server side
-
-  //   fetch("http://127.0.0.1:8000/api/init/", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       current_search: this.state.current_search,
-  //       token: sessionStorage.token,
-  //     }),
-  //     mode: "cors",
-  //     cache: "no-cache",
-  //   })
-  //     .then((res) => res.json())
-  //     .then((res) => {
-  //       console.log(res);
-  //       if (res.code != 200) {
-  //         // this.props.history.push(`/error?status=${res.code}`);
-  //       } else {
-  //         this.setState({
-  //           total_page: res.data.totol_page,
-  //         });
-  //       }
-  //     });
-  // };
 
   render() {
     return (
@@ -128,6 +110,7 @@ class ViewerPage extends React.Component {
                       <Row>
                         <Col>
                           <SearchPath />
+                          <Pagination />
                         </Col>
                       </Row>
                     </Tab.Pane>

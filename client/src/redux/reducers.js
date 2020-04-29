@@ -15,8 +15,11 @@ export const current_path = (state = "", action) => {
 export const token = (state = "", action) =>
   action.type === C.SET_TOKEN ? action.payload.token : state;
 
-export const current_page = (state = 0, action) => {
+export const current_page = (state = 1, action) => {
   switch (action.type) {
+    case C.SET_CURRENT_PAGE:
+      return action.payload.current_page;
+
     case C.SET_QUERY:
       return action.payload.current_page;
 
@@ -35,7 +38,7 @@ export const keyword = (state = "", action) => {
   }
 };
 
-export const total_page = (state = 0, action) => {
+export const total_page = (state = 1, action) => {
   switch (action.type) {
     case C.SET_TOTAL_PAGE:
       return action.payload.total_page;

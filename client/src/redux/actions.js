@@ -19,6 +19,16 @@ export const set_query = (current_path, current_page, keyword) => {
     },
   };
 };
+
+export const set_total_page = (page) => {
+  return {
+    type: C.SET_TOTAL_PAGE,
+    payload: {
+      total_page: page,
+    },
+  };
+};
+
 // export const set_current_path = (path) => {
 //   return {
 //     type: C.SET_CURRENT_PATH,
@@ -47,23 +57,14 @@ export const set_query = (current_path, current_page, keyword) => {
 //   };
 // };
 
-// export const set_total_page = (page) => {
-//   return {
-//     type: C.SET_TOTAL_PAGE,
-//     payload: {
-//       total_page: page,
-//     },
-//   };
-// };
-
-// export const set_current_page = (page) => {
-//   return {
-//     type: C.SET_CURRENT_PAGE,
-//     payload: {
-//       current_page: page,
-//     },
-//   };
-// };
+export const set_current_page = (page) => {
+  return {
+    type: C.SET_CURRENT_PAGE,
+    payload: {
+      current_page: page,
+    },
+  };
+};
 
 // export const view_image_model = (show) => {
 //   return {
