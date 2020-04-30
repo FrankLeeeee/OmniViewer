@@ -6,15 +6,11 @@ import SearchBar from "../components/searchBar";
 import CopyrightFooter from "../components/copyrightFooter";
 import HomeLogo from "../components/homeLogo";
 import UpdateModal from "../components/updateModal";
-import utils from "../utils";
-import { connect } from "react-redux";
-import { set_token } from "../redux/actions";
+import api_caller from "../api_action_wrapper";
 
 class HomePage extends React.Component {
   componentDidMount() {
-    utils.getToken((tk) => {
-      this.props.dispatch(set_token(tk));
-    });
+    api_caller.getToken();
   }
 
   render() {
@@ -30,4 +26,4 @@ class HomePage extends React.Component {
   }
 }
 
-export default connect()(HomePage);
+export default HomePage;

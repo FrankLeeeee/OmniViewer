@@ -23,6 +23,9 @@ export const current_page = (state = 1, action) => {
     case C.SET_QUERY:
       return action.payload.current_page;
 
+    case C.SET_CURRENT_PAGE:
+      return 1;
+
     default:
       return state;
   }
@@ -40,8 +43,18 @@ export const keyword = (state = "", action) => {
 
 export const total_page = (state = 1, action) => {
   switch (action.type) {
-    case C.SET_TOTAL_PAGE:
+    case C.SET_SERVER_INIT_RESPONSE:
       return action.payload.total_page;
+
+    default:
+      return state;
+  }
+};
+
+export const item_initialized_on_server = (state = false, action) => {
+  switch (action.type) {
+    case C.SET_SERVER_INIT_RESPONSE:
+      return true;
 
     default:
       return state;
@@ -63,6 +76,7 @@ export default combineReducers({
     current_page,
     keyword,
   }),
+  item_initialized_on_server,
   total_page,
   page_items,
   show_image,

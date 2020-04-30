@@ -18,7 +18,7 @@ String.format = function () {
 class ItemCard extends React.Component {
   get_img_src = (item) => {
     var extension = item.path.split(".").pop().toLowerCase();
-    img_src = null;
+    var img_src = null;
 
     switch (item.type) {
       case "dir":
@@ -59,9 +59,13 @@ class ItemCard extends React.Component {
             item.image.encodedImage
           );
         } else {
-          img_src = "../static/images/picture.png";
+          img_src = picture;
           console.log("image failed to load");
         }
+        break;
+
+      default:
+        img_src = picture;
         break;
     }
     return img_src;
@@ -73,7 +77,7 @@ class ItemCard extends React.Component {
 
   render() {
     return (
-      <div class="p-2 border text-center">
+      <div className="p-2 border text-center">
         <div>
           <img
             src={this.get_img_src(this.props.item)}
@@ -83,7 +87,7 @@ class ItemCard extends React.Component {
             onClick={this.viewOriginalImage}
           />
         </div>
-        <div class="object-name">
+        <div className="object-name">
           <span>{this.props.item.basename}</span>
         </div>
       </div>

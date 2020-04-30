@@ -20,11 +20,29 @@ export const set_query = (current_path, current_page, keyword) => {
   };
 };
 
-export const set_total_page = (page) => {
+export const set_server_init_response = (page) => {
   return {
-    type: C.SET_TOTAL_PAGE,
+    type: C.SET_SERVER_INIT_RESPONSE,
     payload: {
       total_page: page,
+    },
+  };
+};
+
+export const set_current_page = (page) => {
+  return {
+    type: C.SET_CURRENT_PAGE,
+    payload: {
+      current_page: page,
+    },
+  };
+};
+
+export const set_page_items = (item_list) => {
+  return {
+    type: C.SET_PAGE_ITEMS,
+    payload: {
+      page_items: item_list,
     },
   };
 };
@@ -56,15 +74,6 @@ export const set_total_page = (page) => {
 //     },
 //   };
 // };
-
-export const set_current_page = (page) => {
-  return {
-    type: C.SET_CURRENT_PAGE,
-    payload: {
-      current_page: page,
-    },
-  };
-};
 
 // export const view_image_model = (show) => {
 //   return {
