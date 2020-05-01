@@ -1,10 +1,10 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../static/style.css";
-import NavBar from "../components/navBar";
-import SearchBarOnViewer from "../components/searchBarOnViewer";
+import "@static/style.css";
+import NavBar from "@src/components/common/navBar";
+import SearchBarOnViewer from "@src/components/viewer/searchBarOnViewer";
 import queryString from "query-string";
-import errorImg from "@/assets/error.png";
+import errorImg from "@public/assets/error.png";
 
 export default class ViewerPage extends React.Component {
   constructor(props) {

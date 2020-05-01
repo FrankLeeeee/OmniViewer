@@ -1,7 +1,7 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import utils from "../utils";
+import utils from "@src/utils";
 
 class Pagination extends React.Component {
   state = {

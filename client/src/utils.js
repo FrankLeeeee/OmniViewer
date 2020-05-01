@@ -2,11 +2,11 @@ import queryString from "query-string";
 import qs from "query-string";
 
 function acsiiToBase64(str_acsii) {
-  return new Buffer(str_acsii).toString("base64");
+  return new Buffer(encodeURIComponent(str_acsii)).toString("base64");
 }
 
 function base64ToAscii(str_base64) {
-  return new Buffer(str_base64, "base64").toString("ascii");
+  return decodeURIComponent(new Buffer(str_base64, "base64").toString("ascii"));
 }
 
 function parseQueryString(urlSearch) {

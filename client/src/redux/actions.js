@@ -47,6 +47,75 @@ export const set_page_items = (item_list) => {
   };
 };
 
+export const set_keyword = (keyword) => {
+  return {
+    type: C.SET_KEYWORD,
+    payload: {
+      keyword: keyword,
+    },
+  };
+};
+
+export const filter_by_keyword = (total_page) => {
+  return {
+    type: C.FILTER_BY_KEYWORD,
+    payload: {
+      total_page: total_page,
+    },
+  };
+};
+
+export const show_image_modal = (show) => {
+  return {
+    type: C.SHOW_IMAGE_MODAL,
+    payload: {
+      show_image: show,
+    },
+  };
+};
+
+export const set_image_path_in_modal = (img_path) => {
+  return {
+    type: C.SET_IMAGE_PATH_IN_MODAL,
+    payload: {
+      img_path: img_path,
+    },
+  };
+};
+
+export const set_image_content_in_modal = (
+  img_encoded,
+  img_width,
+  img_height
+) => {
+  return {
+    type: C.SET_IMAGE_CONTENT_IN_MODAL,
+    payload: {
+      img_encoded: img_encoded,
+      img_width: img_width,
+      img_height: img_height,
+    },
+  };
+};
+
+export const show_video_modal = (show) => {
+  return {
+    type: C.SHOW_VIDEO_MODAL,
+    payload: {
+      show_video: show,
+    },
+  };
+};
+
+export const set_video_url_in_modal = (video_url) => {
+  return {
+    type: C.SET_VIDEO_URL,
+    payload: {
+      video_url: video_url,
+    },
+  };
+};
+
 // export const set_current_path = (path) => {
 //   return {
 //     type: C.SET_CURRENT_PATH,
@@ -61,16 +130,6 @@ export const set_page_items = (item_list) => {
 //     type: C.SET_PAGE_ITEMS,
 //     payload: {
 //       page_items: item_list,
-//     },
-//   };
-// };
-
-// export const set_keyword = (token, keyword) => {
-//   return {
-//     type: C.SET_KEYWORD,
-//     payload: {
-//       token: token,
-//       keyword: keyword,
 //     },
 //   };
 // };

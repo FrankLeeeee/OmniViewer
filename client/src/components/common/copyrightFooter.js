@@ -1,6 +1,6 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import githubLogo from "@/assets/github-logo.png";
+import githubLogo from "@public/assets/github-logo.png";
 
 export default class NavBar extends React.Component {
   render() {

@@ -1,10 +1,10 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../static/style.css";
+import "@static/style.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { withRouter } from "react-router-dom";
-import logo from "@/assets/logo.png";
+import logo from "@public/assets/logo.png";
 
 class SearchBarOnViewer extends React.Component {
   state = {
@@ -16,6 +16,9 @@ class SearchBarOnViewer extends React.Component {
     var path = new Buffer(this.state.query).toString("base64");
     var url = `/view?dir=${path}#`;
     this.props.history.push(url);
+    this.setState({
+      query: "",
+    });
   };
 
   onInputChange = (e) => {
@@ -40,7 +43,7 @@ class SearchBarOnViewer extends React.Component {
                   aria-describedby="searchBtn"
                   className="rounded-pill form-control border-0 searchBar"
                   name="search_query"
-                  id="searchContent"
+                  value={this.state.query}
                   onChange={this.onInputChange}
                 />
                 <div className="input-group-append">

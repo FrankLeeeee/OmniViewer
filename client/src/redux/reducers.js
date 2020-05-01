@@ -1,5 +1,6 @@
 import C from "./constants";
 import { combineReducers } from "redux";
+import loader from "@public/assets/loader.svg";
 
 export const current_path = (state = "", action) => {
   switch (action.type) {
@@ -23,7 +24,7 @@ export const current_page = (state = 1, action) => {
     case C.SET_QUERY:
       return action.payload.current_page;
 
-    case C.SET_CURRENT_PAGE:
+    case C.FILTER_BY_KEYWORD:
       return 1;
 
     default:
@@ -36,6 +37,9 @@ export const keyword = (state = "", action) => {
     case C.SET_QUERY:
       return action.payload.keyword;
 
+    case C.SET_KEYWORD:
+      return action.payload.keyword;
+
     default:
       return state;
   }
@@ -44,6 +48,9 @@ export const keyword = (state = "", action) => {
 export const total_page = (state = 1, action) => {
   switch (action.type) {
     case C.SET_SERVER_INIT_RESPONSE:
+      return action.payload.total_page;
+
+    case C.FILTER_BY_KEYWORD:
       return action.payload.total_page;
 
     default:
@@ -64,11 +71,74 @@ export const item_initialized_on_server = (state = false, action) => {
 export const page_items = (state = [], action) =>
   action.type == C.SET_PAGE_ITEMS ? action.payload.page_items : state;
 
-export const show_image = (state = false, action) =>
-  action.type == C.VIEW_IMAGE_MODEL ? action.payload.show_image : state;
+export const filtered = (state = false, action) => {
+  switch (action.type) {
+    case C.SET_QUERY:
+      var keyword = action.payload.keyword;
+      if (keyword != undefined && keyword != "" && keyword != "undefined") {
+        return true;
+      } else {
+        return false;
+      }
 
+    case C.FILTER_BY_KEYWORD:
+      return true;
+
+    default:
+      return state;
+  }
+};
+
+// image modal
+export const show_image = (state = false, action) =>
+  action.type == C.SHOW_IMAGE_MODAL ? action.payload.show_image : state;
+
+export const img_path = (state = "", action) => {
+  switch (action.type) {
+    case C.SET_IMAGE_PATH_IN_MODAL:
+      return action.payload.img_path;
+
+    default:
+      return state;
+  }
+};
+
+export const img_encoded = (state = loader, action) => {
+  switch (action.type) {
+    case C.SET_IMAGE_CONTENT_IN_MODAL:
+      return action.payload.img_encoded;
+
+    default:
+      return state;
+  }
+};
+
+export const img_width = (state = "", action) => {
+  switch (action.type) {
+    case C.SET_IMAGE_CONTENT_IN_MODAL:
+      return action.payload.img_width;
+
+    default:
+      return state;
+  }
+};
+
+export const img_height = (state = "", action) => {
+  switch (action.type) {
+    case C.SET_IMAGE_CONTENT_IN_MODAL:
+      return action.payload.img_height;
+
+    default:
+      return state;
+  }
+};
+
+// video modal
 export const show_video = (state = false, action) =>
-  action.type == C.VIEW_VIDEO_MODEL ? action.payload.show_video : state;
+  action.type == C.SHOW_VIDEO_MODAL ? action.payload.show_video : state;
+
+export const video_url = (state = "", action) =>
+  action.type == C.SET_VIDEO_URL ? action.payload.video_url : state;
 
 export default combineReducers({
   query: combineReducers({
@@ -77,9 +147,19 @@ export default combineReducers({
     keyword,
   }),
   item_initialized_on_server,
+  filtered,
   total_page,
   page_items,
-  show_image,
-  show_video,
+  image_modal: combineReducers({
+    show_image,
+    img_encoded,
+    img_path,
+    img_width,
+    img_height,
+  }),
+  video_modal: combineReducers({
+    video_url,
+    show_video,
+  }),
   token,
 });

@@ -1,15 +1,13 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { withRouter } from "react-router-dom";
-import utils from "../utils";
+import utils from "@src/utils";
+import { connect } from "react-redux";
 
 class KeywordFilter extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      keyword: props.keyword,
-    };
-  }
+  state = {
+    keyword: this.props.keyword,
+  };
 
   onKeywordChange = (e) => {
     e.preventDefault();
@@ -22,18 +20,22 @@ class KeywordFilter extends React.Component {
     }
   };
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.keyword !== this.state.keyword) {
+      this.setState({ keyword: nextProps.keyword });
+    }
+  }
+
   onFormSubmit = (e) => {
     e.preventDefault();
     var keyword = this.state.keyword;
 
-    if (keyword != "" && keyword != undefined) {
-      var keywordBase64 = utils.acsiiToBase64(keyword);
-      var pathname = this.props.location.pathname;
-      var search = utils.parseQueryString(this.props.location.search);
-      search.keyword = keywordBase64;
-      var search_string = "?" + utils.stringifyUrlQuery(search);
-      this.props.history.push({ pathname: pathname, search: search_string });
-    }
+    var keywordBase64 = utils.acsiiToBase64(keyword);
+    var pathname = this.props.location.pathname;
+    var search = utils.parseQueryString(this.props.location.search);
+    search.keyword = keywordBase64;
+    var search_string = "?" + utils.stringifyUrlQuery(search);
+    this.props.history.push({ pathname: pathname, search: search_string });
   };
 
   render() {
@@ -54,4 +56,14 @@ class KeywordFilter extends React.Component {
   }
 }
 
-export default withRouter(KeywordFilter);
+const mapStateToProps = (state) => {
+  var keyword = state.query.keyword;
+
+  if (keyword == undefined || keyword == "undefined") {
+    keyword = "";
+  }
+
+  return { keyword: keyword };
+};
+
+export default withRouter(connect(mapStateToProps)(KeywordFilter));

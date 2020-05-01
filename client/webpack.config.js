@@ -9,7 +9,7 @@ function resolve(dir) {
 
 module.exports = {
   // mode: "production",
-  entry: "./src/index.js",
+  entry: ["@babel/polyfill", "./src/index.js"],
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
@@ -57,7 +57,9 @@ module.exports = {
   },
   resolve: {
     alias: {
-      "@": resolve("public"), // 这样配置后 @ 可以指向 src 目录
+      "@public": resolve("public"), // 这样配置后 @ 可以指向 src 目录
+      "@static": resolve("src/static"),
+      "@src": resolve("src"),
     },
   },
 };

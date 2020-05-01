@@ -17,8 +17,8 @@ class ItemGrid extends React.Component {
 
         {}
         <div className="row" id="image-row">
-          {this.props.item_list &&
-            this.props.item_list.map((item, idx) => {
+          {this.props.item_initialized_on_server &&
+            this.props.page_items.map((item, idx) => {
               return (
                 <div
                   className="col-lg-2 col-md-3 col-sm-4 mb-2 text-center"

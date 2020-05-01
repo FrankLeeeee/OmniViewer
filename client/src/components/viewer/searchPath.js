@@ -1,6 +1,6 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import utils from "../utils";
+import utils from "@src/utils";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
