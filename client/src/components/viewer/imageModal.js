@@ -75,7 +75,7 @@ class ImageModal extends React.Component {
           </div>
 
           <div className="text-white container large-image-name">
-            <div>{this.props.img_path}</div>
+            {this.props.img_path}
             <div className="mt-1 mb-2 large-image-size">
               {this.props.img_width} x {this.props.img_height}
             </div>
