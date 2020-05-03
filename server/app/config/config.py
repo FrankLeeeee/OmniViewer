@@ -7,6 +7,7 @@ update_log = {
     "new_features": [
         "1. 重构了系统架构，前后端分离",
         "2. 用react+redux重构了前端",
+        "3. 支持URL query params"
     ],
     "optimization": [
         "1. 优化前端逻辑",
