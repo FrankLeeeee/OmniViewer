@@ -15,6 +15,7 @@ export default class UpdateModal extends React.Component {
       new_features: [],
       optimization: [],
       bug_fix: [],
+      showAgain: true,
     };
   }
 
