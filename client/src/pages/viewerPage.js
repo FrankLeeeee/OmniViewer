@@ -25,7 +25,9 @@ class ViewerPage extends React.Component {
 
     // listen for url change
     this.unlisten = this.props.history.listen((location, action) => {
-      urlListener(location.search);
+      if (location.pathname == "/view") {
+        urlListener(location.search);
+      }
     });
   }
 
