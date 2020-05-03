@@ -116,6 +116,34 @@ export const set_video_url_in_modal = (video_url) => {
   };
 };
 
+export const set_stats = (img_count, img_format_data, img_cls_data) => {
+  return {
+    type: C.SET_STATS,
+    payload: {
+      img_count: img_count,
+      img_format: img_format_data,
+      img_cls: img_cls_data,
+    },
+  };
+};
+
+export const set_error = (error_code) => {
+  return {
+    type: C.SET_ERROR,
+    payload: {
+      error_code: error_code,
+    },
+  };
+};
+
+export const set_page_status = (loaded) => {
+  return {
+    type: C.SET_PAGE_STATUS,
+    payload: {
+      loaded: loaded,
+    },
+  };
+};
 // export const set_current_path = (path) => {
 //   return {
 //     type: C.SET_CURRENT_PATH,

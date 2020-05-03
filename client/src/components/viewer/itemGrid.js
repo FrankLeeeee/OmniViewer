@@ -34,8 +34,6 @@ class ItemGrid extends React.Component {
   }
 }
 
-// To-do
-// complete load images
 const mapStateToProps = (state) => {
   return {
     page_items: state.page_items,

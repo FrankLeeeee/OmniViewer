@@ -63,6 +63,12 @@ export const item_initialized_on_server = (state = false, action) => {
     case C.SET_SERVER_INIT_RESPONSE:
       return true;
 
+    case C.SET_PAGE_STATUS:
+      return action.payload.loaded;
+
+    case C.SET_PAGE_ITEMS:
+      return true;
+
     default:
       return state;
   }
@@ -140,6 +146,27 @@ export const show_video = (state = false, action) =>
 export const video_url = (state = "", action) =>
   action.type == C.SET_VIDEO_URL ? action.payload.video_url : state;
 
+export const img_count = (state = "", action) =>
+  action.type == C.SET_STATS ? action.payload.img_count : state;
+
+export const img_format = (state = [], action) =>
+  action.type == C.SET_STATS ? action.payload.img_format : state;
+
+export const img_cls = (state = [], action) =>
+  action.type == C.SET_STATS ? action.payload.img_cls : state;
+
+export const error_code = (state = -1, action) => {
+  switch (action.type) {
+    case C.SET_ERROR:
+      return action.payload.error_code;
+
+    case C.SET_SERVER_INIT_RESPONSE:
+      return -1;
+
+    default:
+      return state;
+  }
+};
 export default combineReducers({
   query: combineReducers({
     current_path,
@@ -161,5 +188,11 @@ export default combineReducers({
     video_url,
     show_video,
   }),
+  stats: combineReducers({
+    img_count,
+    img_format,
+    img_cls,
+  }),
   token,
+  error_code,
 });

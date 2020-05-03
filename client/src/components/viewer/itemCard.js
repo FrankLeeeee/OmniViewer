@@ -29,7 +29,7 @@ class ItemCard extends React.Component {
 
       case "image":
         if (item.image.status == 200) {
-          img_src = `data:img/${exntension};base64, ${item.image.encodedImage}`;
+          img_src = `data:img/${extension};base64, ${item.image.encodedImage}`;
         } else {
           img_src = picture;
           toast.error(
@@ -40,7 +40,7 @@ class ItemCard extends React.Component {
 
       case "detection":
         if (item.image.status == 200) {
-          img_src = `data:img/${exntension};base64, ${item.image.encodedImage}`;
+          img_src = `data:img/${extension};base64, ${item.image.encodedImage}`;
         } else {
           img_src = picture;
           toast.error(

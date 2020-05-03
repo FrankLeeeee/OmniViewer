@@ -3,12 +3,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "@static/style.css";
 import NavBar from "@src/components/common/navBar";
 import SearchBarOnViewer from "@src/components/viewer/searchBarOnViewer";
-import ViewerContainer from "@src/components/viewer/viewerContainer";
+import TabContainer from "@src/components/viewer/tabContainer";
+import ErrorContainer from "@src/components/error/errorContainer";
 import utils from "@src/utils";
-import Tab from "react-bootstrap/Tab";
-import Nav from "react-bootstrap/Nav";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import { connect } from "react-redux";
 import apiWrapper from "@src/api_action_wrapper";
 import { set_query } from "@src/redux/actions";
@@ -22,6 +19,7 @@ class ViewerPage extends React.Component {
     apiWrapper
       .getToken()
       .then(apiWrapper.init_server)
+      .catch((err) => console.log(err))
       .then(apiWrapper.filter_by_keyword)
       .then(apiWrapper.get_page_items);
 
@@ -40,34 +38,11 @@ class ViewerPage extends React.Component {
             <SearchBarOnViewer />
           </div>
           <div className="m-3">
-            <Tab.Container defaultActiveKey="viewer">
-              <Row>
-                <Col>
-                  <Nav variant="pills">
-                    <Nav.Item>
-                      <Nav.Link eventKey="viewer">浏览</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                      <Nav.Link eventKey="stats">统计</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                      <Nav.Link href="/">用户手册</Nav.Link>
-                    </Nav.Item>
-                  </Nav>
-                </Col>
-              </Row>
-              <hr />
-              <Row>
-                <Col>
-                  <Tab.Content>
-                    <Tab.Pane eventKey="viewer">
-                      <ViewerContainer />
-                    </Tab.Pane>
-                    <Tab.Pane eventKey="stats">stats</Tab.Pane>
-                  </Tab.Content>
-                </Col>
-              </Row>
-            </Tab.Container>
+            {this.props.error_code == -1 && <TabContainer />}
+
+            {this.props.error_code != -1 && (
+              <ErrorContainer error_code={this.props.error_code} />
+            )}
           </div>
         </div>
       </div>
@@ -75,4 +50,10 @@ class ViewerPage extends React.Component {
   }
 }
 
-export default connect()(ViewerPage);
+const mapStateToProps = (state) => {
+  return {
+    error_code: state.error_code,
+  };
+};
+
+export default connect(mapStateToProps)(ViewerPage);

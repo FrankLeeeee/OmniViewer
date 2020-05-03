@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "@static/style.css";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import toast from "@src/toast/toast";
 
 export default class UpdateModal extends React.Component {
   constructor() {
@@ -18,14 +19,14 @@ export default class UpdateModal extends React.Component {
   }
 
   componentWillMount() {
-    fetch("http://127.0.0.1:8000/api/update", {
+    fetch("http://wxrg0340:8000/api/update", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     }).then((res) => {
       if (res.status !== 200) {
-        console.log("获取更新信息失败。");
+        toast.error("获取更新信息失败。");
       } else {
         res.json().then((res) => {
           var showAgain = localStorage.showAgain;

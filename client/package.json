@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx webpack-dev-server --content-base src --hot --inline"
+    "dev": "npx webpack-dev-server --content-base src --hot --inline",
+    "build": "webpack"
   },
   "author": "",
   "license": "ISC",
@@ -36,11 +37,14 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/react-fontawesome": "^0.1.9",
+    "@trendmicro/react-sidenav": "^0.5.0",
     "bootstrap": "^4.4.1",
+    "chart.js": "^2.9.3",
     "jquery": "^3.5.0",
     "query-string": "^6.12.1",
     "react": "^16.13.0",
     "react-bootstrap": "^1.0.0",
+    "react-chartjs-2": "^2.9.0",
     "react-dom": "^16.13.0",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.1.2",

@@ -9,7 +9,7 @@ const getToken = async () => {
     var state = store.getState();
 
     if (state.query.token == undefined) {
-      var response = await fetch("http://localhost:8000/api/getToken", {
+      var response = await fetch("http://wxrg0340:8000/api/getToken", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -32,7 +32,7 @@ const init_server = async () => {
   // set up path content on server side
   const state = store.getState();
 
-  var response = await fetch("http://localhost:8000/api/init/", {
+  var response = await fetch("http://wxrg0340:8000/api/init/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -49,6 +49,7 @@ const init_server = async () => {
   var response = await response.json();
   if (response.code != 200) {
     toast.error("服务器端初始化失败");
+    store.dispatch(actions.set_error(response.code));
     // this.props.history.push(`/error?status=${res.code}`);
   } else {
     store.dispatch(actions.set_server_init_response(response.data.total_page));
@@ -56,9 +57,10 @@ const init_server = async () => {
 };
 
 const get_page_items = async () => {
+  store.dispatch(actions.set_page_status(false));
   var state = store.getState();
 
-  var response = await fetch("http://localhost:8000/api/getPage/", {
+  var response = await fetch("http://wxrg0340:8000/api/getPage/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -85,26 +87,32 @@ const get_page_items = async () => {
 const filter_by_keyword = async () => {
   var state = store.getState();
 
-  var response = await fetch("http://localhost:8000/api/filterByKeyword/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json;charset=UTF-8",
-    },
-    body: JSON.stringify({
-      current_search: state.query.current_path,
-      keyword: state.query.keyword,
-      token: state.token,
-    }),
-    credentials: "include",
-    mode: "cors",
-    cache: "no-cache",
-  });
+  if (
+    state.query.keyword != "" &&
+    state.query.keyword != undefined &&
+    state.query.keyword != "undefined"
+  ) {
+    var response = await fetch("http://wxrg0340:8000/api/filterByKeyword/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json;charset=UTF-8",
+      },
+      body: JSON.stringify({
+        current_search: state.query.current_path,
+        keyword: state.query.keyword,
+        token: state.token,
+      }),
+      credentials: "include",
+      mode: "cors",
+      cache: "no-cache",
+    });
 
-  if (response.ok) {
-    var res = await response.json();
-    store.dispatch(actions.filter_by_keyword(res.data.total_page));
-  } else {
-    toast.error("获取页面内容失败");
+    if (response.ok) {
+      var res = await response.json();
+      store.dispatch(actions.filter_by_keyword(res.data.total_page));
+    } else {
+      toast.error("获取页面内容失败");
+    }
   }
 };
 
@@ -112,7 +120,7 @@ const load_original_image = async (img_path, img_type) => {
   store.dispatch(actions.show_image_modal(true));
   store.dispatch(actions.set_image_path_in_modal(img_path));
 
-  var response = await fetch("http://localhost:8000/api/getOriginalImage/", {
+  var response = await fetch("http://wxrg0340:8000/api/getOriginalImage/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -141,7 +149,7 @@ const load_original_image = async (img_path, img_type) => {
 };
 
 const download_file = async (img_path) => {
-  var response = await fetch("http://localhost:8000/api/getDownloadId/", {
+  var response = await fetch("http://wxrg0340:8000/api/getDownloadId/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -157,7 +165,7 @@ const download_file = async (img_path) => {
   if (response.ok) {
     response = await response.json();
     var download_id = response.data;
-    location.href = `http://localhost:8000/api/download/${download_id}`;
+    location.href = `http://wxrg0340:8000/api/download/${download_id}`;
   } else {
     toast.error(`获取下载链接失败: ${img_path}`);
   }
@@ -165,7 +173,7 @@ const download_file = async (img_path) => {
 
 const load_video = async (video_path) => {
   store.dispatch(actions.show_video_modal(true));
-  var response = await fetch("http://localhost:8000/api/getVideoId/", {
+  var response = await fetch("http://wxrg0340:8000/api/getVideoId/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -183,11 +191,39 @@ const load_video = async (video_path) => {
     var video_id = response.data;
     store.dispatch(
       actions.set_video_url_in_modal(
-        `http://localhost:8000/api/video/${video_id}`
+        `http://wxrg0340:8000/api/video/${video_id}`
       )
     );
   } else {
     toast.error(`获取视频资源失败: ${video_path}`);
+  }
+};
+
+const load_stats = async () => {
+  var state = store.getState();
+
+  var response = await fetch("http://wxrg0340:8000/api/getStats/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8",
+    },
+    body: JSON.stringify({
+      token: state.token,
+      filtered: state.filtered,
+    }),
+    credentials: "include",
+    mode: "cors",
+    cache: "no-cache",
+  });
+
+  if (response.ok) {
+    response = await response.json();
+    var stats = response.data;
+    store.dispatch(
+      actions.set_stats(stats["count"], stats["formats"], stats["labels"])
+    );
+  } else {
+    toast.error("获取统计数据失败");
   }
 };
 
@@ -199,4 +235,5 @@ export default {
   load_original_image: load_original_image,
   download_file: download_file,
   load_video: load_video,
+  load_stats: load_stats,
 };
