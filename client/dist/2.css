@@ -1,0 +1,288 @@
+/* ========= General ========= */
+
+.w-400 {
+  width: 400px;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* ========= Home page ========= */
+
+.home-logo {
+  margin-top: 150px;
+}
+
+.form-control:focus {
+  box-shadow: none;
+}
+
+.searchBar::placeholder {
+  font-size: 0.95rem;
+  color: #aaa;
+  font-style: italic;
+}
+
+/* ========= File grid ========= */
+
+.object-container {
+  height: 200px;
+}
+
+.object-grid-image {
+  max-width: 100%;
+  object-fit: cover;
+  max-height: 100%;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  -ms-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+
+.object-grid-image:hover {
+  /* -moz-box-shadow: 1px 1px 5px #999; */
+  /* -webkit-box-shadow: 1px 1px 5px #999; */
+  /* box-shadow: 1px 1px 1px #999; */
+  transform: scale(1.05);
+  overflow: hidden;
+}
+
+.object-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* For Bootstrap notify */
+
+[data-notify="progressbar"] {
+  margin-bottom: 0px;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  height: 5px;
+}
+
+/* ========= spinner ========= */
+
+.spinner-border {
+  width: 100px;
+  height: 100px;
+}
+
+/* ========= image modal ========= */
+
+/* The Modal (background) */
+
+.speical-modal .modal {
+  position: fixed;
+  /* Stay in place */
+  z-index: 99;
+  /* Sit on top */
+  padding-top: 100px;
+  /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0);
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.9);
+  /* Black w/ opacity */
+}
+
+/* Modal Content (Image) */
+
+.speical-modal .modal .modal-content {
+  margin: auto;
+  display: block;
+  width: 25%;
+  max-width: 70%;
+  background-color: transparent;
+}
+
+/* Caption of Modal Image (Image Text) - Same Width as the Image */
+
+.large-image-name,
+.large-image-size {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+  text-align: center;
+  padding: 10px 0;
+}
+
+/* Add Animation - Zoom in the Modal */
+
+.speical-modal .modal .modal-content,
+.large-image-name,
+.large-image-size {
+  animation-name: zoom;
+  animation-duration: 0.6s;
+}
+
+@keyframes zoom {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* 100% Image Width on Smaller Screens */
+
+@media only screen and (max-width: 700px) {
+  .speical-modal .modal .modal-content {
+    width: 100%;
+  }
+}
+
+/* ========= video modal ========= */
+
+/* The Close Button */
+
+.video-close {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.video-close:hover,
+.video-close:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
+
+.toast-notification {
+  position: fixed;
+  top: 20px;
+  transform: translate(-50%, 0px);
+  /* left: 0;
+  right: 0; */
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.toast-notice-wrapper.notice-enter {
+  opacity: 0.01;
+  transform: scale(0);
+}
+
+.toast-notice-wrapper.notice-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: all 300ms ease-out;
+}
+
+.toast-notice-wrapper.notice-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast-notice-wrapper.notice-exit-active {
+  opacity: 0.01;
+  transform: translateY(-40%);
+  transition: all 300ms ease-out;
+}
+
+.toast-notice {
+  background: #ffffff;
+  padding: 12px 8px;
+  margin: 8px auto;
+  box-shadow: 0px 20px 20px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  color: #454545;
+  font-size: 15px;
+  align-items: center;
+  display: flex;
+}
+
+.toast-notice > span {
+  margin-left: 6px;
+  line-height: 100%;
+}
+
+.toast-notice > .notice-info {
+  color: #1890ff;
+}
+
+.toast-notice > .notice-success {
+  color: #52c41a;
+}
+
+.toast-notice > .notice-warning {
+  color: #faad14;
+}
+
+.toast-notice > .notice-error {
+  color: #f74a53;
+}
+
+.toast-notice > .notice-loading {
+  color: #1890ff;
+  animation: rotating 1s linear infinite;
+}
+
+@keyframes rotating {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/*!
+ * Start Bootstrap - Simple Sidebar (https://startbootstrap.com/template-overviews/simple-sidebar)
+ * Copyright 2013-2019 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-simple-sidebar/blob/master/LICENSE)
+ */
+
+body {
+  overflow-x: hidden;
+}
+
+#sidebar-wrapper {
+  min-height: 100vh;
+  margin-left: -15rem;
+  -webkit-transition: margin 0.25s ease-out;
+  -moz-transition: margin 0.25s ease-out;
+  -o-transition: margin 0.25s ease-out;
+  transition: margin 0.25s ease-out;
+}
+
+#sidebar-wrapper .sidebar-heading {
+  padding: 0.875rem 1.25rem;
+  font-size: 1.2rem;
+}
+
+@media (min-width: 768px) {
+  #sidebar-wrapper {
+    margin-left: 0;
+  }
+}
+

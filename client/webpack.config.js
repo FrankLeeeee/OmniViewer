@@ -2,24 +2,76 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+  .BundleAnalyzerPlugin;
 
 function resolve(dir) {
   return path.join(__dirname, dir);
 }
 
 module.exports = {
-  // mode: "production",
-  entry: ["@babel/polyfill", "./src/index.js"],
+  mode: "production",
+  entry: {
+    client: ["@babel/polyfill", "./src/index.js"],
+    vendor: [
+      "react",
+      "react-dom",
+      "react-router-dom",
+      "redux",
+      "react-redux",
+      "query-string",
+    ],
+    design: ["bootstrap", "react-bootstrap", "chart.js", "react-chartjs-2"],
+    icon: [
+      "@ant-design/icons",
+      "@fortawesome/fontawesome-svg-core",
+      "@fortawesome/free-solid-svg-icons",
+      "@fortawesome/react-fontawesome",
+    ],
+  },
   output: {
-    filename: "bundle.js",
+    filename: "[name].chunkhash.bundle.js",
     path: path.resolve(__dirname, "dist"),
     publicPath: "/",
+    chunkFilename: "[name].chunkhash.bundle.js",
   },
   optimization: {
     minimize: true,
     minimizer: [new TerserPlugin()],
+    runtimeChunk: "single",
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          enforce: true,
+          chunks: "all",
+        },
+        design: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "designs",
+          enforce: true,
+          chunks: "all",
+        },
+        icon: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "icons",
+          enforce: true,
+          chunks: "all",
+        },
+      },
+    },
   },
   plugins: [
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // all options are optional
+      filename: "[name].css",
+      chunkFilename: "[id].css",
+      ignoreOrder: false, // Enable to remove warnings about conflicting order
+    }),
+    // new BundleAnalyzerPlugin(),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: "./src/index.html",
@@ -32,16 +84,17 @@ module.exports = {
     open: true,
     historyApiFallback: true,
   },
+  devtool: false,
   module: {
     rules: [
       {
         test: /\.css$/,
-        use: [{ loader: "style-loader" }, { loader: "css-loader" }],
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
       {
         test: /\.(png|jpg|jpeg|gif)$/,
         include: path.join(__dirname, "public/"),
-        use: [{ loader: "url-loader" }],
+        use: [{ loader: "file-loader" }],
       },
       {
         test: /\.(eot|ttf|woff|svg)$/,
