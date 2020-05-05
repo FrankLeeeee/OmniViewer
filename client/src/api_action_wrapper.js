@@ -1,6 +1,7 @@
 import * as actions from "@src/redux/actions";
 import store from "@src/redux/store";
 import toast from "@src/toast/toast";
+import apis from "./api";
 
 const getToken = async () => {
   if (sessionStorage.token != undefined) {
@@ -9,7 +10,7 @@ const getToken = async () => {
     var state = store.getState();
 
     if (state.query.token == undefined) {
-      var response = await fetch("http://wxrg0340:8000/api/getToken", {
+      var response = await fetch(apis.get_toke, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -32,7 +33,7 @@ const init_server = async () => {
   // set up path content on server side
   const state = store.getState();
 
-  var response = await fetch("http://wxrg0340:8000/api/init/", {
+  var response = await fetch(apis.init_server, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -60,7 +61,7 @@ const get_page_items = async () => {
   store.dispatch(actions.set_page_status(false));
   var state = store.getState();
 
-  var response = await fetch("http://wxrg0340:8000/api/getPage/", {
+  var response = await fetch(apis.get_page_items, {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -92,7 +93,7 @@ const filter_by_keyword = async () => {
     state.query.keyword != undefined &&
     state.query.keyword != "undefined"
   ) {
-    var response = await fetch("http://wxrg0340:8000/api/filterByKeyword/", {
+    var response = await fetch(apis.filter_by_keyword, {
       method: "POST",
       headers: {
         "Content-Type": "application/json;charset=UTF-8",
@@ -120,7 +121,7 @@ const load_original_image = async (img_path, img_type) => {
   store.dispatch(actions.show_image_modal(true));
   store.dispatch(actions.set_image_path_in_modal(img_path));
 
-  var response = await fetch("http://wxrg0340:8000/api/getOriginalImage/", {
+  var response = await fetch(apis.load_original_image, {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -149,7 +150,7 @@ const load_original_image = async (img_path, img_type) => {
 };
 
 const download_file = async (img_path) => {
-  var response = await fetch("http://wxrg0340:8000/api/getDownloadId/", {
+  var response = await fetch(apis.get_download_id, {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -165,7 +166,7 @@ const download_file = async (img_path) => {
   if (response.ok) {
     response = await response.json();
     var download_id = response.data;
-    location.href = `http://wxrg0340:8000/api/download/${download_id}`;
+    location.href = apis.download_file + download_id;
   } else {
     toast.error(`获取下载链接失败: ${img_path}`);
   }
@@ -173,7 +174,7 @@ const download_file = async (img_path) => {
 
 const load_video = async (video_path) => {
   store.dispatch(actions.show_video_modal(true));
-  var response = await fetch("http://wxrg0340:8000/api/getVideoId/", {
+  var response = await fetch(apis.get_video_id, {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -189,11 +190,7 @@ const load_video = async (video_path) => {
   if (response.ok) {
     response = await response.json();
     var video_id = response.data;
-    store.dispatch(
-      actions.set_video_url_in_modal(
-        `http://wxrg0340:8000/api/video/${video_id}`
-      )
-    );
+    store.dispatch(actions.set_video_url_in_modal(apis.load_video + video_id));
   } else {
     toast.error(`获取视频资源失败: ${video_path}`);
   }
@@ -202,7 +199,7 @@ const load_video = async (video_path) => {
 const load_stats = async () => {
   var state = store.getState();
 
-  var response = await fetch("http://wxrg0340:8000/api/getStats/", {
+  var response = await fetch(apis.load_stats, {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",

@@ -14,6 +14,7 @@ class VideoModel extends React.Component {
     e.preventDefault();
     this.props.dispatch(actions.show_video_modal(false));
     this.props.dispatch(actions.set_video_url_in_modal(""));
+    this.videoRef.current.pause();
   };
 
   componentWillReceiveProps(nextProps) {

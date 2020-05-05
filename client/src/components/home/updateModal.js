@@ -4,6 +4,7 @@ import "@static/style.css";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import toast from "@src/toast/toast";
+import apis from "@src/api";
 
 export default class UpdateModal extends React.Component {
   constructor() {
@@ -20,7 +21,7 @@ export default class UpdateModal extends React.Component {
   }
 
   componentWillMount() {
-    fetch("http://wxrg0340:8000/api/update", {
+    fetch(apis.update, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
