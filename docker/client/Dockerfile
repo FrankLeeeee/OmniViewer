@@ -2,7 +2,7 @@ ARG APIHOST="localhost"
 ARG APIPORT="8000"
 ARG CLIENTPORT="5000"
 
-FROM node
+FROM node:13.8.0
 
 RUN apt-get update && apt-get install -y nginx \
     && cd /home \
