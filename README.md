@@ -98,12 +98,31 @@ v0.4
 6. 支持 responsive layout
 7. 支持图片统计分析
 
-## How to use
+## 安装
+
+##### 下载 repository
 
 1. git clone \<this repo\>
 2. cd OmniViewer
-3. pip install -r requirements.txt
-4. python manage.py runserver
+
+##### docker 部署前端
+
+1. cd ./docker/client
+2. 根据需求改 Dockerfile 里的 ARG
+3. docker build -t omniviewer-client .
+4. docker run -dit -p ${client_port}:${client_port} --name ov-client omniviewer-client bash
+5. docker exec -ti ov-client bash
+6. exit from docker
+
+##### docker 部署后端
+
+1. cd ./docker/server
+2. 根据需求改 Dockerfile 里的 ARG
+3. docker build -t omniviewer-server .
+4. docker run -dit -p ${server_port}:${server_port} --name ov-server -v /mnt:/mnt omniviewer-server bash
+5. docker exec -ti ov-client bash
+6. bash run.sh
+7. exit from docker
 
 ## To-Do for v0.2
 
