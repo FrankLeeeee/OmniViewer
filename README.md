@@ -8,19 +8,45 @@
 
 ## Version
 
-v0.4
+v0.6
 
 ## 更新日志
 
-2020.02.02
+2020.05.07  
 新增
 
-1. 支持下载图片
-2. 支持同一浏览器里多开
-3. 添加了用户手册
-4. 支持观看 mp4 视频
-5. 支持预览 detection + attributes 标注文件
-6. 支持更新通知
+1. docker 容器弹性化部署
+
+修复
+
+1. 修复了 gunicorn 超时问题
+
+<br>
+
+2020.05.03  
+新增
+
+1. 重构了系统架构，前后端分离
+1. 用 react+redux 重构了前端
+1. 支持 URL query params
+
+优化
+
+1. 优化前端逻辑
+2. 优化带宽使用
+3. 优化了通知模块
+
+<br>
+
+2020.02.02  
+新增
+
+4. 支持下载图片
+5. 支持同一浏览器里多开
+6. 添加了用户手册
+7. 支持观看 mp4 视频
+8. 支持预览 detection + attributes 标注文件
+9. 支持更新通知
 
 优化
 
@@ -83,12 +109,12 @@ v0.4
 
 ## Features
 
-###### 配置
+#### 后端配置
 
 1. 可以在 config.py 里调整搜索结果的排数
 2. 可以在 config.py 里调整预览图片的大小，越小越快，但越模糊。
 
-###### 图片预览
+#### 图片预览
 
 1. 可以快速预览远程的图片，带宽占用低
 2. 可以点击小图看到清晰原图
@@ -100,27 +126,28 @@ v0.4
 
 ## 安装
 
-##### 下载 repository
+#### 下载 repository
 
 1. git clone \<this repo\>
 2. cd OmniViewer
 
-##### docker 部署前端
+#### docker 部署前端
 
 1. cd ./docker/client
 2. 根据需求改 Dockerfile 里的 ARG
 3. docker build -t omniviewer-client .
 4. docker run -dit -p ${client_port}:${client_port} --name ov-client omniviewer-client bash
 5. docker exec -ti ov-client bash
-6. exit from docker
+6. service nginx start
+7. exit from docker
 
-##### docker 部署后端
+#### docker 部署后端
 
 1. cd ./docker/server
 2. 根据需求改 Dockerfile 里的 ARG
 3. docker build -t omniviewer-server .
 4. docker run -dit -p ${server_port}:${server_port} --name ov-server -v /mnt:/mnt omniviewer-server bash
-5. docker exec -ti ov-client bash
+5. docker exec -ti ov-server bash
 6. bash run.sh
 7. exit from docker
 
@@ -156,9 +183,15 @@ v0.4
 
 ## To-Do for v0.5
 
-- [ ] 支持编辑 list, tsv
-- [ ] 支持 sampling
+- [x] 前后端分离
+- [x] react+redux 重构前端
+
+## To-Do for v0.6
+
+- [x] gunicorn 部署后端
+- [x] docker 部署
+- [x] 左右方向键看原图
 
 ## Contact Me
 
-如果有 bug 或者别的需求，请钉钉“Frank 李升桂”
+email: somerlee.9@gmail.com

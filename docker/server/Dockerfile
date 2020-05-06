@@ -8,8 +8,8 @@ RUN apt-get update && apt-get install -y git-core redis-server\
     && cd /home \
     && git clone https://github.com/FrankLeeeee/OmniViewer.git \
     && cd ./OmniViewer/server \ 
-    && mkdirs log \
-    && sed -i "s/8000/$server_port/g" gunicorn.conf \
+    && mkdir log \
+    && sed -i "s/8000/$server_port/g" gunicorn_conf.py \
     && pip install -r requirements.txt \
     && cd ./OmniViewer \
     && sed -i "s/localhost/$client_host/g" settings.py \
