@@ -7,6 +7,7 @@ RUN apt-get install git-core \
     && git clone https://github.com/FrankLeeeee/OmniViewer.git \
     && cd ./OmniViewer/server \ 
     && pip install -r requirements.txt \
-    && sed -i "s/8000/$server_port/g" gunicorn.conf.py
+    && sed -i "s/8000/$server_port/g" gunicorn.conf.py \
+    && apt-get install redis-server
 
 WORKDIR /home/OmniViewer/server
