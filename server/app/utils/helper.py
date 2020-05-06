@@ -3,7 +3,6 @@ from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 import base64
 from app.config.config import *
-from app.utils import annotation
 import math
 
 BASE_DIR = dirname(dirname(dirname(abspath(__file__))))
