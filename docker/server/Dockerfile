@@ -3,7 +3,7 @@ FROM python:3.7.4
 ARG client_host=localhost
 ARG client_port=5000
 
-RUN apt-get update && apt-get install git-core \
+RUN apt-get update && apt-get install git-core gunicorn \
     && cd /home \
     && git clone https://github.com/FrankLeeeee/OmniViewer.git \
     && cd ./OmniViewer/server \ 
