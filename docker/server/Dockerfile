@@ -3,7 +3,7 @@ FROM python:3.7.4
 ARG client_host=localhost
 ARG client_port=5000
 
-RUN apt-get update && apt-get install git-core gunicorn \
+RUN apt-get update && apt-get install git-core \
     && cd /home \
     && git clone https://github.com/FrankLeeeee/OmniViewer.git \
     && cd ./OmniViewer/server \ 
@@ -14,3 +14,5 @@ RUN apt-get update && apt-get install git-core gunicorn \
     && apt-get install -y redis-server
 
 WORKDIR /home/OmniViewer/server
+
+ENTRYPOINT [ "redis-server", "--daemonize", "yes" ]
