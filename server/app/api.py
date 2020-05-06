@@ -19,7 +19,7 @@ pool = Pool(processes=8)
 
 def get_token(request):
     res = {}
-    token = uuid.uuid4()
+    token = uuid.uuid4().hex
     res['token'] = token
     request.session[token] = {}
     return JsonResponse(res, status=200)
@@ -69,6 +69,7 @@ def init(request):
                     request.session[token]['path_list'] = parseTSV(
                         current_search, pool)
                     mode = "tsv"
+            request.session.save()
         except:
             res['code'] = 500
             res['message'] = "Internal server error, failed to parse the search results"
@@ -91,7 +92,6 @@ def init(request):
             "current_search": norm_path
         }
         res['data'] = data
-
         return JsonResponse(res, status=200)
 
 
@@ -119,6 +119,8 @@ def get_page(request):
             return JsonResponse(res, status=406)
 
         if token not in request.session:
+            # print(token)
+            # print(request.session.keys())
             res['code'] = 500
             res['message'] = "Session is not found"
             return JsonResponse(res, status=500)
