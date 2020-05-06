@@ -153,9 +153,8 @@ def get_original_image(request):
         try:
             req = json.loads(request.body.decode("utf-8"))
             img_path = req.get('path')
-            img_type = req.get('type')
 
-            if img_path == None or img_type == None:
+            if img_path == None:
                 raise Exception("Invalid POST data")
 
         except:

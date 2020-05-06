@@ -24,7 +24,7 @@ class ItemGrid extends React.Component {
                   className="col-lg-2 col-md-3 col-sm-4 mb-2 text-center"
                   key={idx}
                 >
-                  <ItemCard item={item} />
+                  <ItemCard item={item} idx={idx} />
                 </div>
               );
             })}

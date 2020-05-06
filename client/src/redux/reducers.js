@@ -87,6 +87,14 @@ export const filtered = (state = false, action) => {
         return false;
       }
 
+    case C.SET_KEYWORD:
+      var keyword = action.payload.keyword;
+      if (keyword != undefined && keyword != "" && keyword != "undefined") {
+        return true;
+      } else {
+        return false;
+      }
+
     case C.FILTER_BY_KEYWORD:
       return true;
 
@@ -139,6 +147,16 @@ export const img_height = (state = "", action) => {
   }
 };
 
+export const img_idx = (state = -1, action) => {
+  switch (action.type) {
+    case C.SET_IMAGE_CONTENT_IN_MODAL:
+      return action.payload.img_idx;
+
+    default:
+      return state;
+  }
+};
+
 // video modal
 export const show_video = (state = false, action) =>
   action.type == C.SHOW_VIDEO_MODAL ? action.payload.show_video : state;
@@ -167,6 +185,7 @@ export const error_code = (state = -1, action) => {
       return state;
   }
 };
+
 export default combineReducers({
   query: combineReducers({
     current_path,
@@ -183,6 +202,7 @@ export default combineReducers({
     img_path,
     img_width,
     img_height,
+    img_idx,
   }),
   video_modal: combineReducers({
     video_url,

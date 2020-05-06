@@ -5,10 +5,10 @@ import utils from "@src/utils";
 
 class Pagination extends React.Component {
   state = {
-    jump_page: null,
+    jumpPage: null,
   };
 
-  create_pagination(current_page, total_page) {
+  createPagination(current_page, total_page) {
     var lower_bound = Math.max(1, current_page - 2);
     var upper_bound = Math.min(total_page, current_page + 2);
     var pagination = [];
@@ -21,7 +21,7 @@ class Pagination extends React.Component {
 
       pagination.push(
         <li className={`page-item text-primary ${active}`}>
-          <a className="page-link btn" onClick={this.change_page} data-page={i}>
+          <a className="page-link btn" onClick={this.changePage} data-page={i}>
             {i}
           </a>
         </li>
@@ -31,23 +31,23 @@ class Pagination extends React.Component {
     return pagination;
   }
 
-  go_to_start = (e) => {
+  goToStart = (e) => {
     e.preventDefault();
-    this.go_to_new_page(1);
+    this.goToNewPage(1);
   };
 
-  go_to_end = (e) => {
+  goToEnd = (e) => {
     e.preventDefault();
-    this.go_to_new_page(this.props.total_page);
+    this.goToNewPage(this.props.total_page);
   };
 
-  change_page = (e) => {
+  changePage = (e) => {
     e.preventDefault();
     var page = parseInt(e.target.getAttribute("data-page"));
-    this.go_to_new_page(page);
+    this.goToNewPage(page);
   };
 
-  go_to_new_page = (page_number) => {
+  goToNewPage = (page_number) => {
     var url = utils.parseQueryString(this.props.history.location.search);
     url.page = page_number;
 
@@ -58,12 +58,12 @@ class Pagination extends React.Component {
   };
 
   handleInputChange = (event) => {
-    this.setState({ jump_page: parseInt(event.target.value) });
+    this.setState({ jumpPage: parseInt(event.target.value) });
   };
 
-  jump_page = (e) => {
+  jumpPage = (e) => {
     e.preventDefault();
-    var page = this.state.jump_page;
+    var page = this.state.jumpPage;
 
     if (
       page == "" ||
@@ -75,7 +75,7 @@ class Pagination extends React.Component {
     ) {
       console.log("Page number out of range");
     } else {
-      this.go_to_new_page(page);
+      this.goToNewPage(page);
     }
   };
 
@@ -88,22 +88,19 @@ class Pagination extends React.Component {
             <li className="page-item">
               <a
                 className="page-link text-primary btn"
-                onClick={this.go_to_start}
+                onClick={this.goToStart}
               >
                 ...
               </a>
             </li>
-            {this.create_pagination(
+            {this.createPagination(
               this.props.current_page,
               this.props.total_page
             ).map((item, idx) => (
               <div key={idx}>{item}</div>
             ))}
             <li className="page-item">
-              <a
-                className="page-link text-primary btn"
-                onClick={this.go_to_end}
-              >
+              <a className="page-link text-primary btn" onClick={this.goToEnd}>
                 ...
               </a>
             </li>
@@ -112,7 +109,7 @@ class Pagination extends React.Component {
 
         {/* page jump */}
         <div className="container w-400">
-          <form className="form-inline text-center" onSubmit={this.jump_page}>
+          <form className="form-inline text-center" onSubmit={this.jumpPage}>
             <div className="input-group w-100">
               <input
                 type="number"

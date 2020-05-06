@@ -8,8 +8,8 @@ import Col from "react-bootstrap/Col";
 import apiWrapper from "@src/api_action_wrapper";
 
 export default class TabContainer extends React.Component {
-  load_stats = () => {
-    apiWrapper.load_stats();
+  loadStats = () => {
+    apiWrapper.loadStats();
   };
 
   render() {
@@ -22,7 +22,7 @@ export default class TabContainer extends React.Component {
                 <Nav.Link eventKey="viewer">浏览</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="stats" onSelect={this.load_stats}>
+                <Nav.Link eventKey="stats" onSelect={this.loadStats}>
                   统计
                 </Nav.Link>
               </Nav.Item>

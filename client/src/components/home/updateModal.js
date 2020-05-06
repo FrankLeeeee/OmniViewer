@@ -71,7 +71,7 @@ export default class UpdateModal extends React.Component {
     });
   };
 
-  render_lines = (lst) => {
+  renderLines = (lst) => {
     return lst.map((item, idx) => {
       return (
         <span key={idx}>
@@ -98,15 +98,15 @@ export default class UpdateModal extends React.Component {
         <Modal.Body>
           新增：
           <br />
-          {this.render_lines(this.state.new_features)}
+          {this.renderLines(this.state.new_features)}
           <br />
           优化：
           <br />
-          {this.render_lines(this.state.optimization)}
+          {this.renderLines(this.state.optimization)}
           <br />
           修复：
           <br />
-          {this.render_lines(this.state.bug_fix)}
+          {this.renderLines(this.state.bug_fix)}
         </Modal.Body>
         <Modal.Footer>
           <label className="checkbox-inline ml-3">

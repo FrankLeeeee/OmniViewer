@@ -2,6 +2,7 @@ import * as actions from "@src/redux/actions";
 import store from "@src/redux/store";
 import toast from "@src/toast/toast";
 import apis from "./api";
+import loader from "@public/assets/loader.svg";
 
 const getToken = async () => {
   if (sessionStorage.token != undefined) {
@@ -29,11 +30,11 @@ const getToken = async () => {
   }
 };
 
-const init_server = async () => {
+const initServer = async () => {
   // set up path content on server side
   const state = store.getState();
 
-  var response = await fetch(apis.init_server, {
+  var response = await fetch(apis.initServer, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -57,11 +58,11 @@ const init_server = async () => {
   }
 };
 
-const get_page_items = async () => {
+const getPageItems = async () => {
   store.dispatch(actions.set_page_status(false));
   var state = store.getState();
 
-  var response = await fetch(apis.get_page_items, {
+  var response = await fetch(apis.getPageItems, {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -85,7 +86,7 @@ const get_page_items = async () => {
   }
 };
 
-const filter_by_keyword = async () => {
+const filterByKeyword = async () => {
   var state = store.getState();
 
   if (
@@ -93,7 +94,7 @@ const filter_by_keyword = async () => {
     state.query.keyword != undefined &&
     state.query.keyword != "undefined"
   ) {
-    var response = await fetch(apis.filter_by_keyword, {
+    var response = await fetch(apis.filterByKeyword, {
       method: "POST",
       headers: {
         "Content-Type": "application/json;charset=UTF-8",
@@ -110,6 +111,7 @@ const filter_by_keyword = async () => {
 
     if (response.ok) {
       var res = await response.json();
+      console.log("hey");
       store.dispatch(actions.filter_by_keyword(res.data.total_page));
     } else {
       toast.error("获取页面内容失败");
@@ -117,18 +119,17 @@ const filter_by_keyword = async () => {
   }
 };
 
-const load_original_image = async (img_path, img_type) => {
+const loadOriginalImage = async (img_path, img_idx) => {
   store.dispatch(actions.show_image_modal(true));
   store.dispatch(actions.set_image_path_in_modal(img_path));
 
-  var response = await fetch(apis.load_original_image, {
+  var response = await fetch(apis.loadOriginalImage, {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
     },
     body: JSON.stringify({
       path: img_path,
-      type: img_type,
     }),
     credentials: "include",
     mode: "cors",
@@ -142,14 +143,52 @@ const load_original_image = async (img_path, img_type) => {
     var img_width = res.data.size[0];
     var img_height = res.data.size[1];
     store.dispatch(
-      actions.set_image_content_in_modal(img_encoded, img_width, img_height)
+      actions.set_image_content_in_modal(
+        img_encoded,
+        img_width,
+        img_height,
+        img_idx
+      )
     );
   } else {
     toast.error(`获取图片失败: ${img_path}`);
   }
 };
 
-const download_file = async (img_path) => {
+const loadPrevOrNextOriginalImage = (img_idx, prev = false) => {
+  var page_items = store.getState().page_items;
+  var target_idx = null;
+
+  if (prev) {
+    for (let i = img_idx - 1; i > -1; i--) {
+      if (page_items[i].type == "image") {
+        target_idx = i;
+        break;
+      }
+    }
+  } else {
+    for (let i = img_idx + 1; i < page_items.length; i++) {
+      if (page_items[i].type == "image") {
+        target_idx = i;
+        console.log(target_idx);
+        break;
+      }
+    }
+  }
+
+  if (target_idx == null) {
+    if (prev) {
+      toast.info("已经到第一张图片了");
+    } else {
+      toast.info("已经到最后一张图片了");
+    }
+  } else {
+    store.dispatch(actions.set_image_content_in_modal(loader, "", "", img_idx));
+    loadOriginalImage(page_items[target_idx].path, target_idx);
+  }
+};
+
+const downloadFile = async (img_path) => {
   var response = await fetch(apis.get_download_id, {
     method: "POST",
     headers: {
@@ -166,13 +205,13 @@ const download_file = async (img_path) => {
   if (response.ok) {
     response = await response.json();
     var download_id = response.data;
-    location.href = apis.download_file + download_id;
+    location.href = apis.downloadFile + download_id;
   } else {
     toast.error(`获取下载链接失败: ${img_path}`);
   }
 };
 
-const load_video = async (video_path) => {
+const loadVideo = async (video_path) => {
   store.dispatch(actions.show_video_modal(true));
   var response = await fetch(apis.get_video_id, {
     method: "POST",
@@ -190,16 +229,16 @@ const load_video = async (video_path) => {
   if (response.ok) {
     response = await response.json();
     var video_id = response.data;
-    store.dispatch(actions.set_video_url_in_modal(apis.load_video + video_id));
+    store.dispatch(actions.set_video_url_in_modal(apis.loadVideo + video_id));
   } else {
     toast.error(`获取视频资源失败: ${video_path}`);
   }
 };
 
-const load_stats = async () => {
+const loadStats = async () => {
   var state = store.getState();
 
-  var response = await fetch(apis.load_stats, {
+  var response = await fetch(apis.loadStats, {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -226,11 +265,12 @@ const load_stats = async () => {
 
 export default {
   getToken: getToken,
-  init_server: init_server,
-  get_page_items: get_page_items,
-  filter_by_keyword: filter_by_keyword,
-  load_original_image: load_original_image,
-  download_file: download_file,
-  load_video: load_video,
-  load_stats: load_stats,
+  initServer: initServer,
+  getPageItems: getPageItems,
+  filterByKeyword: filterByKeyword,
+  loadOriginalImage: loadOriginalImage,
+  loadPrevOrNextOriginalImage: loadPrevOrNextOriginalImage,
+  downloadFile: downloadFile,
+  loadVideo: loadVideo,
+  loadStats: loadStats,
 };

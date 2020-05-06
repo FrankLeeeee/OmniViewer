@@ -10,7 +10,7 @@ import utils from "@src/utils";
 import apiWrapper from "@src/api_action_wrapper";
 
 class ItemCard extends React.Component {
-  get_img_src = (item) => {
+  getImageSource = (item) => {
     var extension = item.path.split(".").pop().toLowerCase();
     var img_src = null;
 
@@ -48,14 +48,14 @@ class ItemCard extends React.Component {
   viewOriginalImage = (e) => {
     e.preventDefault();
     var img_path = e.target.getAttribute("data-path");
-    var img_type = e.target.getAttribute("data-type");
-    apiWrapper.load_original_image(img_path, img_type);
+    var img_idx = e.target.getAttribute("data-idx");
+    apiWrapper.loadOriginalImage(img_path, img_idx);
   };
 
   viewVideo = (e) => {
     e.preventDefault();
     var video_path = e.target.getAttribute("data-path");
-    apiWrapper.load_video(video_path);
+    apiWrapper.loadVideo(video_path);
   };
 
   enterFolder = (e) => {
@@ -101,11 +101,11 @@ class ItemCard extends React.Component {
       <div className="p-2 border text-center">
         <div>
           <img
-            src={this.get_img_src(this.props.item)}
+            src={this.getImageSource(this.props.item)}
             className="object-grid-image image-fluid object-container"
             alt="item"
             data-path={this.props.item.path}
-            data-type={this.props.item.type}
+            data-idx={this.props.idx}
             onClick={this.onClickFuncMapping(this.props.item.type)}
             onDoubleClick={this.onDoubleClickFuncMapping(this.props.item.type)}
           />

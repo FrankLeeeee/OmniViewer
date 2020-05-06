@@ -86,7 +86,8 @@ export const set_image_path_in_modal = (img_path) => {
 export const set_image_content_in_modal = (
   img_encoded,
   img_width,
-  img_height
+  img_height,
+  img_idx
 ) => {
   return {
     type: C.SET_IMAGE_CONTENT_IN_MODAL,
@@ -94,6 +95,7 @@ export const set_image_content_in_modal = (
       img_encoded: img_encoded,
       img_width: img_width,
       img_height: img_height,
+      img_idx: img_idx,
     },
   };
 };

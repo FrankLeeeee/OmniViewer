@@ -10,6 +10,8 @@ import {
   faSearchMinus,
   faSearchPlus,
   faDownload,
+  faArrowRight,
+  faArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
 
 class ImageModal extends React.Component {
@@ -23,27 +25,52 @@ class ImageModal extends React.Component {
     this.props.dispatch(actions.show_image_modal(false));
     this.props.dispatch(actions.set_image_path_in_modal("image path"));
     this.props.dispatch(actions.set_image_content_in_modal(loader, -1, -1));
+    document.removeEventListener("keydown", this.onKeyDown);
   };
 
-  zoom_out = (e) => {
+  zoomOut = (e) => {
     e.preventDefault();
     var width = parseInt(this.imgRef.current.width);
     this.imgRef.current.style.width = `${width / 1.5}px`;
   };
 
-  zoom_in = (e) => {
+  zoomIn = (e) => {
     e.preventDefault();
     var width = parseInt(this.imgRef.current.width);
     this.imgRef.current.style.width = `${width * 1.5}px`;
   };
 
   download = (e) => {
-    apiWrapper.download_file(this.props.img_path);
+    e.preventDefault();
+    apiWrapper.downloadFile(this.props.img_path);
+  };
+
+  nextImage = (e) => {
+    e.preventDefault();
+    apiWrapper.loadPrevOrNextOriginalImage(parseInt(this.props.img_idx), false);
+  };
+
+  prevImage = (e) => {
+    e.preventDefault();
+    apiWrapper.loadPrevOrNextOriginalImage(parseInt(this.props.img_idx), true);
+  };
+
+  onKeyDown = (e) => {
+    switch (e.keyCode) {
+      case 37:
+        this.prevImage(e);
+        break;
+
+      case 39:
+        this.nextImage(e);
+        break;
+    }
   };
 
   render() {
     if (this.props.show_image) {
       var display = "block";
+      document.addEventListener("keydown", this.onKeyDown);
     } else {
       var display = "none";
     }
@@ -54,14 +81,14 @@ class ImageModal extends React.Component {
             <button
               type="button"
               className="btn btn-outline-secondary m-2"
-              onClick={this.zoom_out}
+              onClick={this.zoomOut}
             >
               <FontAwesomeIcon icon={faSearchMinus} />
             </button>
             <button
               type="button"
               className="btn btn-outline-secondary m-2"
-              onClick={this.zoom_in}
+              onClick={this.zoomIn}
             >
               <FontAwesomeIcon icon={faSearchPlus} />
             </button>
@@ -71,6 +98,20 @@ class ImageModal extends React.Component {
               onClick={this.download}
             >
               <FontAwesomeIcon icon={faDownload} />
+            </button>
+            <button
+              type="button"
+              className="btn btn-outline-secondary m-2"
+              onClick={this.prevImage}
+            >
+              <FontAwesomeIcon icon={faArrowLeft} />
+            </button>
+            <button
+              type="button"
+              className="btn btn-outline-secondary m-2"
+              onClick={this.nextImage}
+            >
+              <FontAwesomeIcon icon={faArrowRight} />
             </button>
           </div>
 
@@ -101,6 +142,7 @@ const mapStateToProps = (state) => {
     img_encoded: state.image_modal.img_encoded,
     img_width: state.image_modal.img_width,
     img_height: state.image_modal.img_height,
+    img_idx: state.image_modal.img_idx,
   };
 };
 

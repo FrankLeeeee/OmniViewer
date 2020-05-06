@@ -10,6 +10,6 @@ RUN apt-get update && apt-get install -y git-core redis-server\
     && pip install -r requirements.txt \
     && cd ./OmniViewer \
     && sed -i "s/localhost/$client_host/g" settings.py \
-    && sed -i "s/3000/$client_port/g" settings.py 
+    && sed -i "s/5000/$client_port/g" settings.py 
 
 WORKDIR /home/OmniViewer/server

@@ -18,10 +18,10 @@ class ViewerPage extends React.Component {
 
     apiWrapper
       .getToken()
-      .then(apiWrapper.init_server)
+      .then(apiWrapper.initServer)
       .catch((err) => console.log(err))
-      .then(apiWrapper.filter_by_keyword)
-      .then(apiWrapper.get_page_items);
+      .then(apiWrapper.filterByKeyword)
+      .then(apiWrapper.getPageItems);
 
     // listen for url change
     this.unlisten = this.props.history.listen((location, action) => {

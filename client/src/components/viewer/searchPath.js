@@ -5,12 +5,12 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
 class SearchPath extends React.Component {
-  render_path = () => {
+  renderPath = () => {
     return this.props.path_split.map((item, idx) => {
       return (
         <span key={idx}>
           <span>/</span>
-          <a href="#" data-idx={idx} onClick={this.change_dir}>
+          <a href="#" data-idx={idx} onClick={this.changeDir}>
             {item}
           </a>
         </span>
@@ -18,7 +18,7 @@ class SearchPath extends React.Component {
     });
   };
 
-  change_dir = (e) => {
+  changeDir = (e) => {
     e.preventDefault();
     var idx = parseInt(e.target.getAttribute("data-idx")) + 1;
     var comps = this.props.path_split.slice(0, idx);
@@ -34,7 +34,7 @@ class SearchPath extends React.Component {
     return (
       <div>
         <span>Current search : </span>
-        {this.render_path()}
+        {this.renderPath()}
       </div>
     );
   }

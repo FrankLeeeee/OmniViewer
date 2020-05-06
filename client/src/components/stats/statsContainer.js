@@ -35,7 +35,7 @@ class StatsContainer extends React.Component {
   }
 }
 
-const generate_dynamic_color = () => {
+const generateDynamicColor = () => {
   var r = Math.floor(Math.random() * 255);
   var g = Math.floor(Math.random() * 255);
   var b = Math.floor(Math.random() * 255);
@@ -61,7 +61,7 @@ const processRawList = (raw_list) => {
   Object.keys(counts).map(function (key, keyIndex) {
     labels.push(key);
     dataset.push(counts[key]);
-    colors.push(generate_dynamic_color());
+    colors.push(generateDynamicColor());
   });
 
   return {
