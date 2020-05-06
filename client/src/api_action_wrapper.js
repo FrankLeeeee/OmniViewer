@@ -11,7 +11,7 @@ const getToken = async () => {
     var state = store.getState();
 
     if (state.query.token == undefined) {
-      var response = await fetch(apis.get_toke, {
+      var response = await fetch(apis.getToken, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -189,7 +189,7 @@ const loadPrevOrNextOriginalImage = (img_idx, prev = false) => {
 };
 
 const downloadFile = async (img_path) => {
-  var response = await fetch(apis.get_download_id, {
+  var response = await fetch(apis.getDownloadId, {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
@@ -213,7 +213,7 @@ const downloadFile = async (img_path) => {
 
 const loadVideo = async (video_path) => {
   store.dispatch(actions.show_video_modal(true));
-  var response = await fetch(apis.get_video_id, {
+  var response = await fetch(apis.getVideoId, {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
