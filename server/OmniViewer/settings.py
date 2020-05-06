@@ -15,9 +15,7 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # logging
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -26,10 +24,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '3l$strk)ebe82u&qjz!*eyc#u16kd8sc%i9&cnhq%=ue&@(ru)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
-'localhost', '127.0.0.1',
+    'localhost',
+    '127.0.0.1',
 ]
 
 # Application definition
@@ -76,7 +75,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'OmniViewer.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -87,25 +85,27 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -120,13 +120,10 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-  os.path.join(BASE_DIR, 'static'),
-)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'), )
 
 # Session settings
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
@@ -138,7 +135,9 @@ CACHES = {
         "LOCATION": "redis://127.0.0.1:6379",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "CONNECTION_POOL_KWARGS": {"max_connections": 100}
+            "CONNECTION_POOL_KWARGS": {
+                "max_connections": 100
+            }
             # "PASSWORD": "123",
         }
     }
@@ -150,10 +149,7 @@ SESSION_CACHE_ALIAS = 'default'
 # cor policy
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ORIGIN_WHITELIST = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000"
-]
+CORS_ORIGIN_WHITELIST = ["http://localhost:3000", "http://127.0.0.1:3000"]
 
 CORS_ALLOW_METHODS = [
     'DELETE',

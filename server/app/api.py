@@ -19,7 +19,9 @@ pool = Pool(processes=8)
 
 def get_token(request):
     res = {}
-    res['token'] = uuid.uuid4()
+    token = uuid.uuid4()
+    res['token'] = token
+    request.session[token] = {}
     return JsonResponse(res, status=200)
 
 
@@ -39,14 +41,12 @@ def init(request):
             token = req.get('token')
             if current_search == None or token == None:
                 raise Exception("Invalid POST data")
-        except Exception as e:
+        except:
             res['code'] = 406
             res['message'] = "Not acceptable, POST data is incomplete"
             return JsonResponse(res, status=406)
 
         try:
-            request.session[token] = {}
-
             if isdir(current_search):
                 request.session[token]['path_list'] = getPathContent(
                     current_search, pool)
@@ -69,14 +69,14 @@ def init(request):
                     request.session[token]['path_list'] = parseTSV(
                         current_search, pool)
                     mode = "tsv"
-        except Exception as e:
+        except:
             res['code'] = 500
             res['message'] = "Internal server error, failed to parse the search results"
             return JsonResponse(res, status=500)
 
         try:
             total_pages = get_total_pages(request.session[token]['path_list'])
-        except Exception as e:
+        except:
             res['code'] = 500
             res['message'] = "Error occured when calculating the total number of pages"
             return JsonResponse(res, status=500)
@@ -113,7 +113,7 @@ def get_page(request):
                 token == None or filtered == None):
                 raise Exception("Invalid POST data")
 
-        except Exception as e:
+        except:
             res['code'] = 406
             res['message'] = "Not acceptable, POST data is incomplete"
             return JsonResponse(res, status=406)
@@ -135,7 +135,7 @@ def get_page(request):
 
             res['data'] = pool.map(get_img_for_page, data)
             return JsonResponse(res, status=200)
-        except Exception as e:
+        except:
             res['code'] = 500
             res['message'] = "Failed to fetch the data from session"
             return JsonResponse(res, status=500)
@@ -156,7 +156,7 @@ def get_original_image(request):
             if img_path == None or img_type == None:
                 raise Exception("Invalid POST data")
 
-        except Exception as e:
+        except:
             res['code'] = 406
             res['message'] = "Not acceptable, POST data is incomplete"
             return JsonResponse(res, status=406)
@@ -172,7 +172,7 @@ def get_original_image(request):
             res['message'] = "Image loaded successfully"
             res['data'] = img_data
             return JsonResponse(res, status=200)
-        except Exception as e:
+        except:
             traceback.print_exc()
             res['code'] = 500
             res['message'] = "Failed to load the image"
@@ -194,7 +194,7 @@ def filter_by_keyword(request):
 
             if current_search == None or keyword == None or token == None:
                 raise Exception("Invalid POST data")
-        except Exception as e:
+        except:
             res['code'] = 406
             res['message'] = "Not acceptable, POST data is incomplete"
             return JsonResponse(res, status=406)
@@ -222,7 +222,7 @@ def filter_by_keyword(request):
             res['data'] = data
             return JsonResponse(res, status=200)
 
-        except Exception as e:
+        except:
             res['code'] = 500
             res['message'] = "Failed to filter the data"
             return JsonResponse(res, status=500)
@@ -242,7 +242,7 @@ def get_stats(request):
 
             if token == None or filtered == None:
                 raise Exception("Invalid POST data")
-        except Exception as e:
+        except:
             res['code'] = 406
             res['message'] = "Not acceptable, POST data is incomplete"
             return JsonResponse(res, status=406)
@@ -270,7 +270,7 @@ def get_stats(request):
             res['data'] = data
             return JsonResponse(res, status=200)
 
-        except Exception as e:
+        except:
             res['code'] = 500
             res['message'] = "Failed to filter the data"
             return JsonResponse(res, status=500)
@@ -289,7 +289,7 @@ def get_download_id(request):
 
             if file_path == None:
                 raise Exception("Invalid POST data")
-        except Exception as e:
+        except:
             res['code'] = 406
             res['message'] = "Not acceptable, POST data is incomplete"
             return JsonResponse(res, status=406)
@@ -365,7 +365,7 @@ def get_video_id(request):
 
             if video_path == None:
                 raise Exception("Invalid POST data")
-        except Exception as e:
+        except:
             res['code'] = 406
             res['message'] = "Not acceptable, POST data is incomplete"
             return JsonResponse(res, status=406)
