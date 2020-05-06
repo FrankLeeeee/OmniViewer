@@ -38,17 +38,6 @@ class ItemCard extends React.Component {
         }
         break;
 
-      case "detection":
-        if (item.image.status == 200) {
-          img_src = `data:img/${extension};base64, ${item.image.encodedImage}`;
-        } else {
-          img_src = picture;
-          toast.error(
-            `Error ${item.image.status}, message: ${item.image.message}, path: ${item.path}`
-          );
-        }
-        break;
-
       default:
         img_src = picture;
         break;
@@ -101,9 +90,6 @@ class ItemCard extends React.Component {
 
       case "video":
         return this.viewVideo;
-
-      case "detection":
-        return this.viewOriginalImage;
 
       default:
         return null;

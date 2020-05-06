@@ -56,14 +56,6 @@ export default class Search extends React.Component {
                 <td>必须是绝对路径，后缀名为"tsv"，通常用于分类问题</td>
                 <td>/home/shenggui/sample.tsv</td>
               </tr>
-              <tr>
-                <th scope="row">detn文件</th>
-                <td>
-                  必须是绝对路径，后缀名为"detn",
-                  文件里的每一行为一个json的detection标注文件路径
-                </td>
-                <td>/home/shenggui/sample.detn</td>
-              </tr>
             </tbody>
           </table>
         </div>

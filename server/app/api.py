@@ -16,10 +16,12 @@ import logging
 
 pool = Pool(processes=8)
 
+
 def get_token(request):
     res = {}
     res['token'] = uuid.uuid4()
     return JsonResponse(res, status=200)
+
 
 # For AJAX request to initialize the data on the server side
 def init(request):
@@ -46,26 +48,27 @@ def init(request):
             request.session[token] = {}
 
             if isdir(current_search):
-                request.session[token]['path_list'] = getPathContent(current_search, pool)
+                request.session[token]['path_list'] = getPathContent(
+                    current_search, pool)
                 mode = "directory"
             elif isfile(current_search):
                 extension = current_search.split(".")[-1].lower()
 
                 if extension in image_formats:
-                    request.session[token]['path_list'] = [map_dir2dict(current_search)]
+                    request.session[token]['path_list'] = [
+                        map_dir2dict(current_search)
+                    ]
                     mode = "image"
 
                 elif extension == "list":
-                    request.session[token]['path_list'] = parseList(current_search, pool)
+                    request.session[token]['path_list'] = parseList(
+                        current_search, pool)
                     mode = "list"
 
                 elif extension == "tsv":
-                    request.session[token]['path_list'] = parseTSV(current_search, pool)
+                    request.session[token]['path_list'] = parseTSV(
+                        current_search, pool)
                     mode = "tsv"
-
-                elif extension == "detn":
-                    request.session[token]['path_list'] = parseList(current_search, pool, map_fn=map_yituanno2dict)
-                    mode = "detection"
         except Exception as e:
             res['code'] = 500
             res['message'] = "Internal server error, failed to parse the search results"
@@ -75,7 +78,7 @@ def init(request):
             total_pages = get_total_pages(request.session[token]['path_list'])
         except Exception as e:
             res['code'] = 500
-            res['message']  = "Error occured when calculating the total number of pages"
+            res['message'] = "Error occured when calculating the total number of pages"
             return JsonResponse(res, status=500)
 
         res['code'] = 200
@@ -83,10 +86,10 @@ def init(request):
         norm_path = normpath(current_search)
 
         data = {
-                "total_page": total_pages,
-                "mode": mode,
-                "current_search": norm_path
-                }
+            "total_page": total_pages,
+            "mode": mode,
+            "current_search": norm_path
+        }
         res['data'] = data
 
         return JsonResponse(res, status=200)
@@ -122,9 +125,13 @@ def get_page(request):
 
         try:
             if filtered:
-                data = request.session[token]['filtered_path_list'][(page_number-1)*MAX_ITEM_PER_PAGE: page_number*MAX_ITEM_PER_PAGE]
+                data = request.session[token]['filtered_path_list'][
+                    (page_number - 1) * MAX_ITEM_PER_PAGE:page_number *
+                    MAX_ITEM_PER_PAGE]
             else:
-                data = request.session[token]['path_list'][(page_number-1)*MAX_ITEM_PER_PAGE: page_number*MAX_ITEM_PER_PAGE]
+                data = request.session[token]['path_list'][
+                    (page_number - 1) * MAX_ITEM_PER_PAGE:page_number *
+                    MAX_ITEM_PER_PAGE]
 
             res['data'] = pool.map(get_img_for_page, data)
             return JsonResponse(res, status=200)
@@ -160,10 +167,7 @@ def get_original_image(request):
             return JsonResponse(res, status=404)
 
         try:
-            if img_type == 'detection':
-                img_data = get_single_image_with_detection_annotation(img_path, original=True)
-            else:
-                img_data = get_single_image(img_path, original=True)
+            img_data = get_single_image(img_path, original=True)
             res['code'] = 200
             res['message'] = "Image loaded successfully"
             res['data'] = img_data
@@ -207,10 +211,11 @@ def filter_by_keyword(request):
             return JsonResponse(res, status=404)
 
         try:
-            path_list = list(filter(filter_by_keyword, request.session[token]['path_list']))
+            path_list = list(
+                filter(filter_by_keyword, request.session[token]['path_list']))
             request.session[token]['filtered_path_list'] = path_list
             request.session.save()
-            total_page = math.ceil(len(path_list)/MAX_ITEM_PER_PAGE)
+            total_page = math.ceil(len(path_list) / MAX_ITEM_PER_PAGE)
             data = {
                 "total_page": total_page,
             }
@@ -249,18 +254,17 @@ def get_stats(request):
 
         try:
             if filtered:
-                imgs = list(filter(filter_imgs, request.session[token]['filtered_path_list']))
+                imgs = list(
+                    filter(filter_imgs,
+                           request.session[token]['filtered_path_list']))
             else:
-                imgs = list(filter(filter_imgs, request.session[token]['path_list']))
+                imgs = list(
+                    filter(filter_imgs, request.session[token]['path_list']))
 
             count = len(imgs)
             formats = pool.map(map2format, imgs)
             labels = pool.map(map2label, imgs)
-            data = {
-                "count": count,
-                "formats":  formats,
-                "labels": labels
-            }
+            data = {"count": count, "formats": formats, "labels": labels}
             res['code'] = 200
             res['message'] = "Successfully obtained the statistics"
             res['data'] = data
@@ -312,7 +316,8 @@ def download_file(request, download_id):
     file_name = basename(file_path)
     response = FileResponse(open(file_path, 'rb'))
     response['content_type'] = "application/octet-stream"
-    response['Content-Disposition'] = 'attachment; filename={}'.format(file_name)
+    response['Content-Disposition'] = 'attachment; filename={}'.format(
+        file_name)
     return response
 
 
@@ -346,6 +351,7 @@ class RangeFileWrapper(object):
                 raise StopIteration()
             self.remaining -= len(data)
             return data
+
 
 def get_video_id(request):
     if request.method != "POST":
@@ -396,19 +402,23 @@ def stream_video(request, video_id):
         if last_byte >= size:
             last_byte = size - 1
         length = last_byte - first_byte + 1
-        resp = StreamingHttpResponse(RangeFileWrapper(open(path, 'rb'), offset=first_byte, length=length), status=206, content_type=content_type)
+        resp = StreamingHttpResponse(RangeFileWrapper(open(path, 'rb'),
+                                                      offset=first_byte,
+                                                      length=length),
+                                     status=206,
+                                     content_type=content_type)
         resp['Content-Length'] = str(length)
-        resp['Content-Range'] = 'bytes %s-%s/%s' % (first_byte, last_byte, size)
+        resp['Content-Range'] = 'bytes %s-%s/%s' % (first_byte, last_byte,
+                                                    size)
     else:
-        resp = StreamingHttpResponse(FileWrapper(open(path, 'rb')), content_type=content_type)
+        resp = StreamingHttpResponse(FileWrapper(open(path, 'rb')),
+                                     content_type=content_type)
         resp['Content-Length'] = str(size)
     resp['Accept-Ranges'] = 'bytes'
     return resp
 
+
 # for update notification
 def get_update(request):
-    data = {
-        "version": version,
-        "update_log": update_log
-    }
+    data = {"version": version, "update_log": update_log}
     return JsonResponse(data, status=200)

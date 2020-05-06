@@ -2,7 +2,7 @@ import React from "react";
 import video_1 from "@public/manual_image/video_1.png";
 import video_2 from "@public/manual_image/video_2.png";
 
-export default class Detection extends React.Component {
+export default class Video extends React.Component {
   render() {
     return (
       <div>

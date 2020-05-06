@@ -64,16 +64,6 @@ const processRawList = (raw_list) => {
     colors.push(generate_dynamic_color());
   });
 
-  console.log({
-    labels: labels,
-    datasets: [
-      {
-        data: dataset,
-        backgroundColor: colors,
-      },
-    ],
-  });
-
   return {
     labels: labels,
     datasets: [

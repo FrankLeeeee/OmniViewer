@@ -8,7 +8,6 @@ import Search from "@src/components/manual/search";
 import FileSystem from "@src/components/manual/fileSystem";
 import Image from "@src/components/manual/image";
 import Video from "@src/components/manual/video";
-import Detection from "@src/components/manual/detection";
 import ListAndTsv from "@src/components/manual/listAndTsv";
 
 export default class ManualPage extends React.Component {
@@ -43,9 +42,6 @@ export default class ManualPage extends React.Component {
               <Nav.Link eventKey="video">Video</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="detection">Detection</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
               <Nav.Link eventKey="list-and-tsv">List & TSV</Nav.Link>
             </Nav.Item>
           </Nav>
@@ -69,11 +65,6 @@ export default class ManualPage extends React.Component {
             <Tab.Pane eventKey="video" className="text-center">
               <div className="mt-5 container">
                 <Video />
-              </div>
-            </Tab.Pane>
-            <Tab.Pane eventKey="detection" className="text-center">
-              <div className="mt-5 container">
-                <Detection />
               </div>
             </Tab.Pane>
             <Tab.Pane eventKey="list-and-tsv" className="text-center">

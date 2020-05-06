@@ -16,7 +16,7 @@ export default class FileSystem extends React.Component {
           <br />
           <p>
             在输入了路径之后，网页会显示当前路径下的文件。如果需要在当前路径下过滤一下搜索结果，可以在右上角filter处输入关键词过滤。
-            双击可以直接打开文件夹，图片，mp4格式的视频，list、tsv和detn后缀的文件。
+            双击可以直接打开文件夹，图片，mp4格式的视频，list和tsv后缀的文件。
           </p>
         </div>
       </div>

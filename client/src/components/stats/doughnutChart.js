@@ -3,7 +3,6 @@ import { Doughnut } from "react-chartjs-2";
 
 class DoughnutChart extends React.Component {
   render() {
-    console.log(this.props.data);
     return (
       <Doughnut
         data={this.props.data}
