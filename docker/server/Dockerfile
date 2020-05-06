@@ -13,5 +13,3 @@ RUN apt-get update && apt-get install -y git-core redis-server\
     && sed -i "s/3000/$client_port/g" settings.py 
 
 WORKDIR /home/OmniViewer/server
-
-ENTRYPOINT [ "redis-server", "--daemonize", "yes" ]
