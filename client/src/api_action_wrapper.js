@@ -3,14 +3,14 @@ import store from "@src/redux/store";
 import toast from "@src/toast/toast";
 import apis from "./api";
 
-const getToken = async () => {
+const get_token = async () => {
   if (sessionStorage.token != undefined) {
     store.dispatch(actions.set_token(sessionStorage.token));
   } else {
     var state = store.getState();
 
     if (state.query.token == undefined) {
-      var response = await fetch(apis.get_toke, {
+      var response = await fetch(apis.get_token, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -20,10 +20,12 @@ const getToken = async () => {
 
       if (response.status !== 200) {
         toast.error("Token获取失败");
+        console.log("ehy");
       } else {
         const data = await response.json();
         sessionStorage.setItem("token", data.token);
         store.dispatch(actions.set_token(data.token));
+        console.log("yo");
       }
     }
   }
@@ -225,7 +227,7 @@ const load_stats = async () => {
 };
 
 export default {
-  getToken: getToken,
+  get_token: get_token,
   init_server: init_server,
   get_page_items: get_page_items,
   filter_by_keyword: filter_by_keyword,

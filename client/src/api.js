@@ -1,6 +1,6 @@
 export default {
   update: "http://localhost:8000/api/update/",
-  get_toke: "http://localhost:8000/api/getToken/",
+  get_token: "http://localhost:8000/api/getToken/",
   init_server: "http://localhost:8000/api/init/",
   get_page_items: "http://localhost:8000/api/getPage/",
   filter_by_keyword: "http://localhost:8000/api/filterByKeyword/",

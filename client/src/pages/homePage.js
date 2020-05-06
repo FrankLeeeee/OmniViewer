@@ -6,11 +6,11 @@ import SearchBar from "../components/home/searchBar";
 import CopyrightFooter from "../components/common/copyrightFooter";
 import HomeLogo from "../components/home/homeLogo";
 import UpdateModal from "../components/home/updateModal";
-import api_caller from "../api_action_wrapper";
+import apiWrapper from "../api_action_wrapper";
 
 class HomePage extends React.Component {
   componentDidMount() {
-    api_caller.getToken();
+    apiWrapper.get_token();
   }
 
   render() {

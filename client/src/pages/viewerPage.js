@@ -17,7 +17,7 @@ class ViewerPage extends React.Component {
     this.props.dispatch(set_query(query.dir, query.page, query.keyword));
 
     apiWrapper
-      .getToken()
+      .get_token()
       .then(apiWrapper.init_server)
       .catch((err) => console.log(err))
       .then(apiWrapper.filter_by_keyword)
