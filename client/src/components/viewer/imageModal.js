@@ -24,8 +24,7 @@ class ImageModal extends React.Component {
     e.preventDefault();
     this.props.dispatch(actions.show_image_modal(false));
     this.props.dispatch(actions.set_image_path_in_modal("image path"));
-    this.props.dispatch(actions.set_image_content_in_modal(loader, -1, -1));
-    document.removeEventListener("keydown", this.onKeyDown);
+    this.props.dispatch(actions.set_image_content_in_modal(loader, -1, -1, -1));
   };
 
   zoomOut = (e) => {
@@ -73,6 +72,7 @@ class ImageModal extends React.Component {
       document.addEventListener("keydown", this.onKeyDown);
     } else {
       var display = "none";
+      document.removeEventListener("keydown", this.onKeyDown);
     }
     return (
       <div className="speical-modal">
